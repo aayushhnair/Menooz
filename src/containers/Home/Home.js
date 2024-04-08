@@ -7,7 +7,7 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 // Local Imports
@@ -27,16 +27,34 @@ import strings from '../../i18n/strings';
 import {newItem, popularPack} from '../../Api/constant';
 import Product from './product';
 import {StackNav} from '../../navigation/NavigationKeys';
+import fetchRestaurantData from '../../Api/restaurantdata';
 
 const Home = () => {
+
+  const [restaurants, setRestaurants] = useState([]);
+
+  const [touch, setTouch] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = fetchRestaurantData((data) => {
+      console.log("\n\n\n\n\n\n\n\n Data Home: ", data ,"\n\n\n\n\n\n\n");
+      setRestaurants(data);
+    });
+    
+    return () => unsubscribe();
+  }, [touch]);
+    
+
   useEffect(() => {
     global.cart = [];
   }, []);
+
+
   const navigation = useNavigation();
   const productCard = ({item, index}) => {
-    return <Product item={item} index={index} getProduct={addToCart} />;
-  };
 
+    return <Product item={item} index={index} />;
+  };
   function addToCart(data) {
     if (global.cart) {
       if (global.cart.some(item => item.productName == data.item.productName)) {
@@ -62,6 +80,7 @@ const Home = () => {
   };
 
   const Section = ({sectionName, product}) => {
+    const restaurantsArray = Object.values(product);
     return (
       <View>
         <View style={localStyles.sectionHeader}>
@@ -77,7 +96,7 @@ const Home = () => {
         <FlatList
           keyExtractor={(item, index) => index.toString()}
           numColumns={1}
-          data={product}
+          data={restaurantsArray}
           renderItem={productCard}
         />
         </View>
@@ -121,7 +140,7 @@ const Home = () => {
           style={localStyles.imageStyle}
         /> */}
         {/* <Section sectionName={strings.newItem} product={popularPack} /> */}
-        <Section sectionName={strings.newItem} product={newItem} />
+        <Section sectionName={strings.newItem} product={restaurants} />
       </ScrollView>
     </GSafeAreaView>
   );
@@ -141,6 +160,7 @@ const localStyles = StyleSheet.create({
     ...styles.justifyBetween,
     ...styles.mh20,
     ...styles.itemsCenter,
+
   },
   location: {
     ...styles.selfCenter,

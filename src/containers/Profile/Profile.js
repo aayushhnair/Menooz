@@ -167,7 +167,7 @@ export default Profile;
 const localStyles = StyleSheet.create({
   root: {
     ...styles.flex,
-    backgroundColor: colors.white,
+    backgroundColor: colors.appblack,
   },
   header: {
     backgroundColor: 'transparent',

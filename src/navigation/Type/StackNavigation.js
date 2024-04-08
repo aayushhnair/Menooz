@@ -41,6 +41,10 @@ export default function StackNavigation() {
         name={StackNav.NewPassword}
         component={StackRoute.NewPassword}
       />
+      <Stack.Screen 
+        name={StackNav.ProductDetail}
+        component={StackRoute.ProductDetail}
+      />
     </Stack.Navigator>
   );
 }

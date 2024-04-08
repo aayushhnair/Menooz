@@ -20,6 +20,7 @@ import { getTotalByKey } from '../../utils/helpers';
 import { useState } from 'react';
 
 const Product = ({ item, index, categoryName, getProduct }) => {
+  console.log("\n\nItems: ",item.restaurantName)
   const navigation = useNavigation();
   const navigateToDetail = () => {
     navigation.navigate(StackNav.ProductDetail, {
@@ -36,7 +37,7 @@ const Product = ({ item, index, categoryName, getProduct }) => {
     <TouchableOpacity onPress={navigateToDetail} style={localStyles.product}>
       <View style={styles.center}>
         <Image
-          source={{ uri: item.imageLink }}
+          source={{ uri: item.imageUrl }}
           resizeMode="cover"
           style={localStyles.imageStyle}
         />
@@ -46,7 +47,7 @@ const Product = ({ item, index, categoryName, getProduct }) => {
           type="b20"
           color={colors.appblack}
           style={localStyles.productNameStyle}>
-          {item.productName}
+          {item.restaurantName}
         </GText>
         {categoryName == 'Popular Pack' ? (
           <GText
@@ -66,7 +67,7 @@ const Product = ({ item, index, categoryName, getProduct }) => {
 
         <View style={localStyles.container2}>
           <GText type="b16" color={colors.appblack}>
-            {strings.review}
+            {strings.review}:{item.avgRating}
             {/* {item.revisedPrice} */}
           </GText>
           <GButton

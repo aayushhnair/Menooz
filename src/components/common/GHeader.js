@@ -28,7 +28,7 @@ const GHeader = ({style, headerTitle, titleColor, isBackWhite}) => {
       </View>
       <View style={localStyles.BackArrow}>
         <GButton onPress={goBack}>
-          {isBackWhite ? <BackArrowWhite /> : <BackArrow />}
+          {<BackArrowWhite /> }
         </GButton>
       </View>
     </View>

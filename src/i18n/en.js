@@ -3,6 +3,7 @@ export default {
   app_name: 'Menooz',
   app_domain: '.ai',
   submit: 'Submit',
+  shoplocation: "Ponnamalle, Chennai",
   your_daily_needs: 'your daily needs',
   onBoardingTitle1: 'Browse all the category',
   onBoardingTitle2: 'Amazing Discounts & Offers',

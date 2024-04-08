@@ -147,75 +147,9 @@ const newItem = restaurent;
 const category = [
   {
     categoryID: 0,
-    categoryname: 'Vegetables',
+    categoryname: 'Nearest Menooz',
     categoryIcon: <Category_Vegetables_Selected />,
     product: vegetables,
-  },
-  {
-    categoryID: 1,
-    categoryname: 'Meat & Fish',
-    categoryIcon: <Category_MeatFish />,
-    product: MeatFish,
-  },
-  {
-    categoryID: 3,
-    categoryname: 'Medicine',
-    categoryIcon: <Category_Medicine />,
-    product: MeatFish,
-  },
-  {
-    categoryID: 4,
-    categoryname: 'Baby Care',
-    categoryIcon: <Category_BabyCare />,
-    product: MeatFish,
-  },
-  {
-    categoryID: 5,
-    categoryname: 'Office Supplies',
-    categoryIcon: <Category_OfficeSupplies />,
-    product: MeatFish,
-  },
-  {
-    categoryID: 6,
-    categoryname: 'Beauty',
-    categoryIcon: <Category_Beauty />,
-    product: MeatFish,
-  },
-  {
-    categoryID: 7,
-    categoryname: 'Gym Equipments',
-    categoryIcon: <Category_Gym />,
-    product: MeatFish,
-  },
-  {
-    categoryID: 8,
-    categoryname: 'Gardening Tools',
-    categoryIcon: <Category_GardeningTools />,
-    product: MeatFish,
-  },
-  {
-    categoryID: 9,
-    categoryname: 'Pet Care',
-    categoryIcon: <Category_PetCare />,
-    product: MeatFish,
-  },
-  {
-    categoryID: 10,
-    categoryname: 'Eye Wears',
-    categoryIcon: <Category_EyeWear />,
-    product: MeatFish,
-  },
-  {
-    categoryID: 11,
-    categoryname: 'Pack',
-    categoryIcon: <Category_Pack />,
-    product: pack,
-  },
-  {
-    categoryID: 12,
-    categoryname: 'Other',
-    categoryIcon: <DotMenu />,
-    product: MeatFish,
   },
 ];
 const MyFavoriteList = [

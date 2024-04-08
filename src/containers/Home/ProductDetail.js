@@ -27,7 +27,7 @@ import {
   Cart_2,
   Heart,
   HeartFilled,
-  MinusGreen,
+  MinusGreen, 
   PlusGreen,
   Star_Filled,
 } from '../../assets/svgs';
@@ -79,8 +79,8 @@ const ProductDetail = ({route, navigation}) => {
     return (
       <View style={styles.center}>
         <Image
-          source={item}
-          resizeMode="contain"
+          source={{uri : item}}
+          resizeMode="cover"
           onLoadStart={onLoad}
           onLoadEnd={onLoadEnd}
           style={localStyles.imgStyle}
@@ -153,10 +153,10 @@ const ProductDetail = ({route, navigation}) => {
   return (
     <GSafeAreaView style={localStyles.root}>
       <GHeader
-        headerTitle={
-          product?.categoryID == 11
-            ? strings.bundleDetailHeader
-            : strings.productDetailHeader
+        headerTitle={strings.app_name
+          // product?.categoryID == 11
+          //   ? strings.bundleDetailHeader
+          //   : strings.productDetailHeader
         }
       />
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -175,16 +175,15 @@ const ProductDetail = ({route, navigation}) => {
             dotStyle={[
               localStyles.dotStyle,
               {
-                width: getWidth(18),
-                backgroundColor: colors.green,
+                width: getWidth(10),
+                backgroundColor: colors.appyellow,
               },
             ]}
             inactiveDotStyle={[
               localStyles.dotStyle,
               {
-                // Define styles for inactive dots here
-                width: getWidth(10),
-                backgroundColor: colors.lightGreen5,
+                width: getWidth(6),
+                backgroundColor: colors.grayScale6,
               },
             ]}
             inactiveDotOpacity={1}
@@ -192,60 +191,22 @@ const ProductDetail = ({route, navigation}) => {
           />
           <GButton
             onPress={addToFavorite}
-            bgColor={colors.white}
+            bgColor={colors.appblack}
             containerStyle={localStyles.addToFavorite}>
-            {isFavorite ? <HeartFilled /> : <Heart />}
+            {isFavorite ? <HeartFilled fill = {colors.appyellow}/> : <Heart/>}
           </GButton>
         </View>
         <View style={localStyles.container2}>
-          <GText type="b24" color={colors.textColor}>
+          <GText type="b24" color={colors.appyellow}>
             {product?.productName}
           </GText>
           {product?.categoryID != 11 ? (
-            <GText type="r16" color={colors.textColor} style={styles.mt15}>
-              {strings.weight}: {product?.wight} {strings.kg}
+            <GText type="r16" color={colors.appwhite} style={styles.mt15}>
+              {strings.shoplocation}
             </GText>
           ) : null}
           {/* product price and quantity increase and decrease */}
-          <View style={localStyles.container}>
-            <View style={[styles.flexRow, styles.itemsEnd]}>
-              <GText
-                type="b18"
-                color={colors.textColor}
-                style={localStyles.originalPrice}>
-                {strings.$}
-                {product?.originalPrice}
-              </GText>
-              <GText
-                type="b28"
-                color={colors.green}
-                style={[styles.ml10, styles.selfEnd]}>
-                {strings.$}
-                {product?.revisedPrice}
-              </GText>
-            </View>
-            <View style={styles.flexRow}>
-              <GButton
-                onPress={decreaseQuantity}
-                icon={<MinusGreen />}
-                bgColor={'transparent'}
-                containerStyle={localStyles.btn}
-              />
-              <GText
-                type="m20"
-                color={colors.textColor}
-                align="center"
-                style={{...styles.mh20, ...styles.selfCenter}}>
-                {quantity}
-              </GText>
-              <GButton
-                onPress={increaseQuantity}
-                icon={<PlusGreen />}
-                bgColor={'transparent'}
-                containerStyle={localStyles.btn}
-              />
-            </View>
-          </View>
+
           {/* Pack Details if Product is pack */}
           {product?.categoryID == 11 && (
             <View>
@@ -280,12 +241,12 @@ const ProductDetail = ({route, navigation}) => {
           )}
           {/* Product Details */}
           <View style={localStyles.container3}>
-            <GText type="b16" color={colors.textColor} style={styles.mt15}>
+            <GText type="b16" color={colors.appwhite} style={styles.mt15}>
               {strings.productDetailHeader}
             </GText>
             <GText
               type="r16"
-              color={colors.labelColor}
+              color={colors.grayScale4}
               style={localStyles.description}>
               {product?.productDetails}
             </GText>
@@ -293,7 +254,7 @@ const ProductDetail = ({route, navigation}) => {
           <TouchableOpacity
             onPress={onPressReview}
             style={[localStyles.container, localStyles.container3]}>
-            <GText type="b16" color={colors.textColor}>
+            <GText type="b16" color={colors.appwhite}>
               {strings.review}
             </GText>
             <View style={localStyles.ratingContainer}>
@@ -303,21 +264,6 @@ const ProductDetail = ({route, navigation}) => {
               <ArrowNext />
             </View>
           </TouchableOpacity>
-          <View style={localStyles.container4}>
-            <TouchableOpacity
-              onPress={navigateToCart}
-              style={localStyles.cartContainer}>
-              <Cart_2 />
-            </TouchableOpacity>
-            <GButton
-              onPress={onBuyNowPress}
-              title={strings.buyNow}
-              textType={'b16'}
-              bgColor={colors.green}
-              color={colors.white}
-              containerStyle={localStyles.buyNowBtn}
-            />
-          </View>
         </View>
       </ScrollView>
     </GSafeAreaView>
@@ -329,19 +275,21 @@ export default ProductDetail;
 const localStyles = StyleSheet.create({
   root: {
     ...styles.flex,
-    backgroundColor: colors.white,
+    backgroundColor: colors.appblack,
   },
   imgContainer: {
-    backgroundColor: colors.lightGreen4,
+    backgroundColor: colors.appblack,
     ...styles.center,
     ...styles.mt25,
     ...styles.mb30,
     ...styles.mh15,
     borderRadius: moderateScale(22),
-    ...styles.pt30,
+
   },
   imgStyle: {
-    width: moderateScale(203),
+    borderTopRightRadius: moderateScale(22),
+    borderTopLeftRadius: moderateScale(22),
+    width: moderateScale(403),
     height: moderateScale(225),
   },
   dotStyle: {
