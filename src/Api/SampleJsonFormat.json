@@ -1,0 +1,219 @@
+{
+  "restaurant_1": {
+    "avgRating": 3.5,
+    "cuisine": [
+      "Italian",
+      "Chinese"
+    ],
+    "delivery": {
+      "deliveryFee": 250,
+      "distanceLimit": 7,
+      "enabled": true,
+      "minOrder": 25
+    },
+    "imageUrl": "https://freerangestock.com/sample/161954/street-view-of-bread-ahead-bakery-and-school.jpg",
+    "location": {
+      "latitude": 40.7128,
+      "longitude": -74.006
+    },
+    "menuData": {
+      "menu_1": {
+        "items": [
+          {
+            "avgRating": 4.7,
+            "category": "Pasta",
+            "description": "Classic pasta dish with bacon, eggs, and Parmesan cheese",
+            "imageUrl": "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2021/02/05/Baked-Feta-Pasta-4_s4x3.jpg.rend.hgtvcom.1280.1280.suffix/1615916524567.jpeg",
+            "name": "Spaghetti Carbonara",
+            "price": 12.99
+          },
+          {
+            "avgRating": 4.6,
+            "category": "Pasta",
+            "description": "Creamy Alfredo sauce with fettuccine pasta",
+            "imageUrl": "",
+            "name": "Fettuccine Alfredo",
+            "price": 11.5
+          },
+          {
+            "avgRating": 4.8,
+            "category": "Pasta",
+            "description": "Layers of pasta, meat, and cheese baked with marinara sauce",
+            "imageUrl": "",
+            "name": "Lasagna",
+            "price": 14.99
+          }
+        ],
+        "name": "Pasta Menu"
+      },
+      "menu_2": {
+        "items": [
+          {
+            "avgRating": 4.4,
+            "category": "Appetizers",
+            "description": "Toasted bread topped with tomatoes, garlic, and basil",
+            "imageUrl": "",
+            "name": "Bruschetta",
+            "price": 8.99
+          },
+          {
+            "avgRating": 4.5,
+            "category": "Appetizers",
+            "description": "Fresh mozzarella, tomatoes, and basil drizzled with balsamic glaze",
+            "imageUrl": "",
+            "name": "Caprese Salad",
+            "price": 9.5
+          }
+        ],
+        "name": "Appetizers"
+      }
+    },
+    "operatingHours": {
+      "friday": {
+        "close": "23:00:00",
+        "open": "09:00:00"
+      },
+      "monday": {
+        "close": "22:00:00",
+        "open": "09:00:00"
+      },
+      "saturday": {
+        "close": "23:00:00",
+        "open": "10:00:00"
+      },
+      "sunday": {
+        "close": "21:00:00",
+        "open": "10:00:00"
+      },
+      "thursday": {
+        "close": "22:00:00",
+        "open": "09:00:00"
+      },
+      "tuesday": {
+        "close": "22:00:00",
+        "open": "09:00:00"
+      },
+      "wednesday": {
+        "close": "22:00:00",
+        "open": "09:00:00"
+      }
+    },
+    "restaurantName": "Hotel White",
+    "restaurantPhoneNumber": 9995187221,
+    "restaurantid": "121213823489",
+    "reviews": {
+      "review_1": true,
+      "review_2": true,
+      "review_3": false,
+      "totalLikes": 0
+    }
+  },
+  "restaurant_2": {
+    "avgRating": 4.3,
+    "cuisine": [
+      "Mediterranean"
+    ],
+    "delivery": {
+      "deliveryFee": 6.99,
+      "distanceLimit": 8,
+      "enabled": false,
+      "minOrder": 30
+    },
+    "imageUrl": "https://www.architectandinteriorsindia.com/cloud/2021/11/15/Story-3-1.gif",
+    "location": {
+      "latitude": 34.0522,
+      "longitude": -118.2437
+    },
+    "menuData": {
+      "menu_1": {
+        "items": [
+          {
+            "avgRating": 4.6,
+            "category": "Appetizers",
+            "description": "Chickpea dip with tahini, garlic, and lemon juice",
+            "imageUrl": "https://example.com/hummus.jpg",
+            "name": "Hummus",
+            "price": 9.99
+          },
+          {
+            "avgRating": 4.4,
+            "category": "Appetizers",
+            "description": "Deep-fried chickpea patties served with tahini sauce",
+            "imageUrl": "https://example.com/falafel.jpg",
+            "name": "Falafel",
+            "price": 8.5
+          },
+          {
+            "avgRating": 4.5,
+            "category": "Salads",
+            "description": "Fresh parsley salad with tomatoes, mint, and bulgur",
+            "imageUrl": "https://example.com/tabbouleh.jpg",
+            "name": "Tabbouleh",
+            "price": 7.99
+          }
+        ],
+        "name": "Mezze Platter"
+      },
+      "menu_2": {
+        "items": [
+          {
+            "avgRating": 4.7,
+            "category": "Entrees",
+            "description": "Grilled marinated meat served with rice, salad, and pita bread",
+            "imageUrl": "https://example.com/shawarma_plate.jpg",
+            "name": "Shawarma Plate",
+            "price": 15.99
+          },
+          {
+            "avgRating": 4.5,
+            "category": "Entrees",
+            "description": "Baked layers of eggplant, potatoes, and ground meat topped with béchamel sauce",
+            "imageUrl": "https://example.com/moussaka.jpg",
+            "name": "Moussaka",
+            "price": 14.5
+          }
+        ],
+        "name": "Main Courses"
+      }
+    },
+    "operatingHours": {
+      "friday": {
+        "close": "22:00:00",
+        "open": "10:00:00"
+      },
+      "monday": {
+        "close": "21:00:00",
+        "open": "10:00:00"
+      },
+      "saturday": {
+        "close": "22:00:00",
+        "open": "11:00:00"
+      },
+      "sunday": {
+        "close": "20:00:00",
+        "open": "11:00:00"
+      },
+      "thursday": {
+        "close": "21:00:00",
+        "open": "10:00:00"
+      },
+      "tuesday": {
+        "close": "14:00:00",
+        "open": "10:00:00"
+      },
+      "wednesday": {
+        "close": "21:00:00",
+        "open": "10:00:00"
+      }
+    },
+    "restaurantName": "Sangamam",
+    "restaurantPhoneNumber": 8547311128,
+    "restaurantid": "08342193481",
+    "reviews": {
+      "review_1": true,
+      "review_2": true,
+      "review_3": true,
+      "totalLikes": 0
+    }
+  }
+}

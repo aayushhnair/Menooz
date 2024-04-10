@@ -40,6 +40,7 @@ import Category_GardeningTools from './Category_GardeningTools.svg';
 import Plus from './Plus.svg';
 import PlusGreen from './Plus_Green.svg';
 import MinusGreen from './Minus_Green.svg';
+import PhoneCall from './PhoneCall.svg'
 import Star_Filled from './Star_Filled.svg';
 import Star_Unfiiled from './Star_Unfilled.svg';
 import ArrowNext from './ArrowNext.svg';
@@ -103,6 +104,7 @@ export {
   Eye_checked,
   Next_Arrow,
   MailBox,
+  PhoneCall,
   Mark,
   Menu,
   Menu_Selected,

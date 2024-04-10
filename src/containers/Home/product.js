@@ -14,27 +14,65 @@ import GText from '../../components/common/GText';
 import GButton from '../../components/common/GButton';
 import strings from '../../i18n/strings';
 import { moderateScale, screenWidth } from '../../common/constants';
-import { Heart, HeartFilled, Plus } from '../../assets/svgs';
+import { Heart, HeartFilled, Plus, Star_Filled, Star_Unfiiled } from '../../assets/svgs';
 import { StackNav } from '../../navigation/NavigationKeys';
 import { getTotalByKey } from '../../utils/helpers';
 import { useState } from 'react';
 
 const Product = ({ item, index, categoryName, getProduct }) => {
-  console.log("\n\nItems: ",item.restaurantName)
   const navigation = useNavigation();
   const navigateToDetail = () => {
     navigation.navigate(StackNav.ProductDetail, {
       product: item,
       categoryName: categoryName,
+      status: isRestaurantOpen(),
     });
   };
   const [isClicked, setIsClicked] = useState(false);
-
+  const now = new Date();
+  const dayOfWeek = now.getDay();
+  const currentHour = now.getHours();
+  const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][dayOfWeek];
+  const openingHour = item.operatingHours[currentDay]?.open;
+  const closingHour = item.operatingHours[currentDay]?.close;
+  const showOpenhour = openingHour ? openingHour.split(':').slice(0, 2).join(':') : '';
+  const showClosehour = closingHour ? closingHour.split(':').slice(0, 2).join(':') : '';
+  const [ratingStar, setRatingStar] = useState([1, 2, 3, 4, 5]);
   const onAddButtonPress = () => {
     setIsClicked(!isClicked);
   };
+
+  const Rating = ({ rating }) => {
+    return ratingStar.map(item => {
+      return item <= rating ? <Star_Filled /> : <Star_Unfiiled />;
+    });
+  };
+
+  const isRestaurantOpen = () => {
+
+    if (openingHour && closingHour) {
+      const [openHour, openMinute] = openingHour.split(':').map(Number);
+      const [closeHour, closeMinute] = closingHour.split(':').map(Number);
+
+      // Check if the current time is within the opening and closing hours
+      if (
+        currentHour > openHour ||
+        (currentHour === openHour && now.getMinutes() >= openMinute)
+      ) {
+        if (
+          currentHour < closeHour ||
+          (currentHour === closeHour && now.getMinutes() < closeMinute)
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+
   return (
-    <TouchableOpacity onPress={navigateToDetail} style={localStyles.product}>
+    <TouchableOpacity onPress={navigateToDetail} style={[localStyles.product, !isRestaurantOpen() && localStyles.overlay]}>
       <View style={styles.center}>
         <Image
           source={{ uri: item.imageUrl }}
@@ -49,33 +87,24 @@ const Product = ({ item, index, categoryName, getProduct }) => {
           style={localStyles.productNameStyle}>
           {item.restaurantName}
         </GText>
-        {categoryName == 'Popular Pack' ? (
-          <GText
-            type="m14"
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            color={colors.appwhite}
-            style={styles.mt5}>
-            {item.productList.map(u => u.productName).join(',')}
-          </GText>
-        ) : (
-          <GText type="m14" color={colors.appblack} style={styles.mt5}>
-            {strings.status}<GText type="b14" color={colors.appyellow} style={styles.mt5}>{ "OPEN" }</GText>
-          </GText>
-          
-        )}
-
-        <View style={localStyles.container2}>
+        <View style={localStyles.reviewContainer}>
           <GText type="b16" color={colors.appblack}>
-            {strings.review}:{item.avgRating}
-            {/* {item.revisedPrice} */}
+            {strings.ratings}
+          </GText>
+           <Rating rating={item.avgRating} />
+        </View>
+        <View style={localStyles.container2}>
+          <GText type="m14" color={colors.appblack} style={styles.mt5}>
+            {strings.status}<GText type="b14" color={colors.appyellow} style={styles.mt5}>
+              {isRestaurantOpen() ? <GText type="b14" color={colors.appyellow} style={styles.mt5}> OPEN </GText> : <GText type="b14" color='red' style={styles.mt5}> CLOSED </GText>}
+            </GText>
+            <GText type="m14" color={colors.appblack} style={styles.mt5}>{" ("}{showOpenhour}{" - "}{showClosehour}{") "}</GText>
           </GText>
           <GButton
             onPress={() => {
               onAddButtonPress();
             }}
-            icon={isClicked ? <HeartFilled/>: <Heart/> }  
-            bgColor={colors.appwhite}
+            icon={isClicked ? <HeartFilled /> : <Heart />}
             containerStyle={localStyles.addButton}
           />
         </View>
@@ -94,16 +123,24 @@ const localStyles = StyleSheet.create({
     borderRadius: moderateScale(20),
   },
   imageStyle: {
-    borderWidth: 3,
-    borderColor: colors.appwhite,
+    borderWidth: 1,
+    borderColor: colors.grayScale5,
     borderTopLeftRadius: moderateScale(20),
     borderTopRightRadius: moderateScale(20),
     width: '100%',
     height: moderateScale(120),
   },
+  overlay: {
+    backgroundColor: colors.grayScale5, // Adjust opacity as needed
+  },
   container2: {
     ...styles.rowSpaceBetween,
     ...styles.mt10,
+  },
+  reviewContainer: {
+
+    ...styles.flexRow,
+    alignItems: 'center',
   },
   addButton: {
     ...styles.center,

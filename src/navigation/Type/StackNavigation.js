@@ -45,6 +45,10 @@ export default function StackNavigation() {
         name={StackNav.ProductDetail}
         component={StackRoute.ProductDetail}
       />
+      <Stack.Screen 
+        name={StackNav.Cart}
+        component={StackRoute.Cart}
+      />
     </Stack.Navigator>
   );
 }

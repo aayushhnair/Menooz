@@ -2,7 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getDatabase, ref, onValue } from 'firebase/database';
 
 const firebaseConfig = {
-    // Replace with your actual Firebase project configuration
     apiKey: "AIzaSyDr6Q2hgFET1Yfs-QVp2qGhsdBnJnFP_Uc",
     authDomain: "",
     databaseURL: "https://menooz-bbd65-default-rtdb.firebaseio.com/",
@@ -13,17 +12,47 @@ const firebaseConfig = {
   };
 
   const app = initializeApp(firebaseConfig);
-
   const db = getDatabase(app);
-  const fetchRestaurantData = (callback) => {
-    const reference = ref(db, '/Restaurants'); // Assuming all restaurants are stored under the 'Restaurants' node
-    const unsubscribe = onValue(reference, (snapshot) => {
-      const data = snapshot.val();
-      const restaurants = data;
-      callback(restaurants);
+
+const fetchRestaurantData = (userLatitude, userLongitude, maxDistance, callback) => {
+    const reference = ref(db, '/Restaurants');
+    onValue(reference, (snapshot) => {
+        const data = snapshot.val();
+        const restaurants = [];
+
+        if (data) {
+            Object.keys(data).forEach((key) => {
+                const restaurant = data[key];
+                const distance = calculateDistance(userLatitude, userLongitude, restaurant.location.latitude, restaurant.location.longitude);
+                if (distance <= maxDistance) {
+                    restaurants.push({ ...restaurant, distance }); // Add distance property to each restaurant
+                }
+            });
+        }
+        
+        // Sort restaurants based on distance (nearest first)
+        restaurants.sort((a, b) => a.distance - b.distance);
+        
+        callback(restaurants);
     });
+};
+
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+      const R = 6371;
+      const dLat = deg2rad(lat2 - lat1);
+      const dLon = deg2rad(lon2 - lon1);
+      const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      const d = R * c;
+      return d;
+  };
   
-    return () => unsubscribe(); // Return cleanup function to detach listener on unmount
+  const deg2rad = (deg) => {
+      return deg * (Math.PI / 180);
   };
   
   export default fetchRestaurantData;

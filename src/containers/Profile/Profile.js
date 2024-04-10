@@ -4,6 +4,8 @@ import {
   StyleSheet,
   FlatList,
   View,
+  Text,
+  Button,
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
@@ -28,6 +30,11 @@ import {
 } from '../../assets/svgs';
 import strings from '../../i18n/strings';
 import {StackNav} from '../../navigation/NavigationKeys';
+import DocumentPicker from 'react-native-document-picker';
+import { RNFS } from 'react-native-fs';
+import XLSX from 'xlsx';
+
+
 
 const Profile = () => {
   const navigation = useNavigation();
@@ -104,6 +111,8 @@ const Profile = () => {
       </TouchableOpacity>
     );
   };
+
+
 
   return (
     <GSafeAreaView style={localStyles.root}>

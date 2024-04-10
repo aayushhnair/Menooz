@@ -10,9 +10,8 @@ import GButton from '../common/GButton';
 const EmptyListComponent = ({title, description, btnTitle, onPress, icon}) => {
   return (
     <View style={localStyles.emptyContainer}>
-      <View style={localStyles.emptyCart}>{icon ? icon : null}</View>
       <View style={localStyles.emptyContainer2}>
-        <GText type="b24" color={colors.textColor}>
+        <GText type="b24" color={colors.appwhite}>
           {title}
         </GText>
         <GText type="r16" color={colors.labelColor} style={styles.mt10}>
@@ -21,9 +20,9 @@ const EmptyListComponent = ({title, description, btnTitle, onPress, icon}) => {
         <GButton
           onPress={onPress}
           textType={'b16'}
-          color={colors.white}
+          color={colors.appblack}
           title={btnTitle}
-          bgColor={colors.green}
+          bgColor={colors.appyellow}
           containerStyle={localStyles.startAddingBtn}
         />
       </View>

@@ -6,13 +6,13 @@ import {
   ActivityIndicator,
   FlatList,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
-import React, {useState} from 'react';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-
+import React, { useState,useEffect } from 'react';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
 import GSafeAreaView from '../../components/common/GSafeAreaView';
 import GHeader from '../../components/common/GHeader';
-import {colors, styles} from '../../themes';
+import { colors, styles } from '../../themes';
 import strings from '../../i18n/strings';
 import {
   getHeight,
@@ -23,20 +23,21 @@ import {
 import GText from '../../components/common/GText';
 import GButton from '../../components/common/GButton';
 import {
-  ArrowNext,
-  Cart_2,
+  Plus,
+  CallIcon,
   Heart,
   HeartFilled,
-  MinusGreen, 
-  PlusGreen,
   Star_Filled,
+  Star_Unfiiled,
 } from '../../assets/svgs';
-import {getTotalByKey} from '../../utils/helpers';
-import {StackNav} from '../../navigation/NavigationKeys';
+import { StackNav } from '../../navigation/NavigationKeys';
+import { getProduct } from 'react-native-device-info';
+import MenuCard from './MenuItem';
 
-const ProductDetail = ({route, navigation}) => {
+const ProductDetail = ({ route, navigation }) => {
   const categoryName = route?.params.categoryName;
   const product = route?.params.product;
+  const status = route?.params.status;
   const [imageLoading, setImageLoading] = useState(false);
   const [index, setIndex] = useState(0);
   const [ratingStar, setRatingStar] = useState([1, 2, 3, 4, 5]);
@@ -50,36 +51,35 @@ const ProductDetail = ({route, navigation}) => {
     setImageLoading(false);
   };
 
-  const increaseQuantity = () => {
-    setQuantity(quantity + 1);
-  };
-  const decreaseQuantity = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
-  };
+
+
+  useEffect(() => {
+    global.cart = [];
+  }, []);
+
+
 
   const onPressReview = () => navigation.navigate(StackNav.Review);
 
-  const PackInformation = ({label, data}) => {
-    return (
-      <View>
-        <GText type="b16" color={colors.textColor} align="center">
-          {data}
-        </GText>
-        <GText
-          type="r14"
-          color={colors.labelColor}
-          align="center"
-          style={styles.mt5}>
-          {label}
-        </GText>
-      </View>
-    );
-  };
-  const ImageCarousel = ({item, index}) => {
+  function addToCart(data) {
+    if (global.cart) {
+      if (global.cart.some(item => item.name == data.item.name)) {
+        let itemIndex = global.cart.findIndex(
+          item => item.name == data.item.name,
+        );
+        global.cart[itemIndex].quantity = global.cart[itemIndex].quantity + 1;
+      } else {
+        data.item.quantity = 1;
+        global.cart.push(data.item);
+      }
+    }
+  }
+
+  const ImageCarousel = ({ item, index }) => {
     return (
       <View style={styles.center}>
         <Image
-          source={{uri : item}}
+          source={{ uri: product.imageUrl }}
           resizeMode="cover"
           onLoadStart={onLoad}
           onLoadEnd={onLoadEnd}
@@ -87,46 +87,20 @@ const ProductDetail = ({route, navigation}) => {
         />
         {imageLoading ? (
           <ActivityIndicator
-            style={[localStyles.imgStyle, {position: 'absolute'}]}
+            style={[localStyles.imgStyle, { position: 'absolute' }]}
           />
         ) : null}
       </View>
     );
   };
 
-  const packItem = ({item, index}) => {
-    return (
-      <View style={localStyles.container1}>
-        <View style={styles.flexRow}>
-          <View style={localStyles.imgContainer2}>
-            <Image
-              source={item.imageLink}
-              resizeMode="contain"
-              style={{width: moderateScale(25), height: moderateScale(25)}}
-            />
-          </View>
 
-          <GText
-            type="m16"
-            color={colors.textColor}
-            align="center"
-            style={[styles.ml20, styles.selfCenter]}>
-            {item.productName}
-          </GText>
-        </View>
-
-        <GText type="m16" color={colors.textColor}>
-          {item.wight} {strings.kg}
-        </GText>
-      </View>
-    );
-  };
   const addToFavorite = () => {
     setIsFavorite(!isFavorite);
   };
-  const Rating = ({rating}) => {
+  const Rating = ({ rating }) => {
     return ratingStar.map(item => {
-      return item <= rating ? <Star_Filled /> : null;
+      return item <= rating ? <Star_Filled /> : <Star_Unfiiled />;
     });
   };
 
@@ -134,21 +108,28 @@ const ProductDetail = ({route, navigation}) => {
     navigation.navigate(StackNav.Cart);
   };
 
-  const onBuyNowPress = () => {
-    if (global.cart) {
-      if (global.cart.some(item => item.productName == product?.productName)) {
-        let itemIndex = global.cart.findIndex(
-          item => item?.productName == product?.productName,
-        );
-        global.cart[itemIndex].quantity =
-          global.cart[itemIndex].quantity + quantity;
-      } else {
-        product.quantity = quantity;
-        global.cart.push(product);
-      }
-    }
-    navigateToCart();
+  const menuItemData = Object.values(product.menuData);
+
+  const Menucardlayout = ({ item, index }) => {
+    return <MenuCard item={item} index={index} getProduct={addToCart} />;
   };
+
+
+  // const onBuyNowPress = () => {
+  //   if (global.cart) {
+  //     if (global.cart.some(item => item.productName == product?.productName)) {
+  //       let itemIndex = global.cart.findIndex(
+  //         item => item?.productName == product?.productName,
+  //       );
+  //       global.cart[itemIndex].quantity =
+  //         global.cart[itemIndex].quantity + quantity;
+  //     } else {
+  //       product.quantity = quantity;
+  //       global.cart.push(product);
+  //     }
+  //   }
+  //   navigateToCart();
+  // };
 
   return (
     <GSafeAreaView style={localStyles.root}>
@@ -183,7 +164,7 @@ const ProductDetail = ({route, navigation}) => {
               localStyles.dotStyle,
               {
                 width: getWidth(6),
-                backgroundColor: colors.grayScale6,
+                backgroundColor: colors.appblack,
               },
             ]}
             inactiveDotOpacity={1}
@@ -193,63 +174,54 @@ const ProductDetail = ({route, navigation}) => {
             onPress={addToFavorite}
             bgColor={colors.appblack}
             containerStyle={localStyles.addToFavorite}>
-            {isFavorite ? <HeartFilled fill = {colors.appyellow}/> : <Heart/>}
+            {isFavorite ? <HeartFilled fill={colors.appyellow} /> : <Heart />}
           </GButton>
         </View>
         <View style={localStyles.container2}>
-          <GText type="b24" color={colors.appyellow}>
-            {product?.productName}
-          </GText>
-          {product?.categoryID != 11 ? (
-            <GText type="r16" color={colors.appwhite} style={styles.mt15}>
-              {strings.shoplocation}
+          <View style={localStyles.containerHeader}>
+            <GText type="b24" color={colors.appyellow}>
+              {product?.restaurantName}
             </GText>
-          ) : null}
-          {/* product price and quantity increase and decrease */}
-
-          {/* Pack Details if Product is pack */}
-          {product?.categoryID == 11 && (
-            <View>
-              <View style={localStyles.packContainer}>
-                <PackInformation
-                  label={strings.weight}
-                  data={
-                    getTotalByKey(product?.productList, 'wight') +
-                    ' ' +
-                    strings.kg
-                  }
-                />
-                <PackInformation label={strings.size} data={product?.size} />
-                <PackInformation
-                  label={strings.item}
-                  data={product?.productList?.length}
-                />
+            {product.restaurantPhoneNumber == "" || !status ? (<TouchableOpacity>
+              <View style={styles.phoneContainer}>
               </View>
-              <View>
-                <GText type="b16" color={colors.textColor}>
-                  {strings.packDetails}
-                </GText>
-                <View>
-                  <FlatList
-                    keyExtractor={(item, index) => index.toString()}
-                    data={product?.productList}
-                    renderItem={packItem}
-                  />
+            </TouchableOpacity>) :
+              (<TouchableOpacity onPress={() => { Linking.openURL(`tel:${product.restaurantPhoneNumber}`) }} >
+                <View style={styles.phoneContainer}>
+                  <CallIcon />
                 </View>
-              </View>
-            </View>
-          )}
+              </TouchableOpacity>)
+            }
+          </View>
           {/* Product Details */}
           <View style={localStyles.container3}>
             <GText type="b16" color={colors.appwhite} style={styles.mt15}>
               {strings.productDetailHeader}
             </GText>
-            <GText
-              type="r16"
-              color={colors.grayScale4}
-              style={localStyles.description}>
-              {product?.productDetails}
-            </GText>
+            {product.delivery.enabled ? (
+              <View>
+                <View style={localStyles.containerHeader}>
+                  <GText type="r16" color={colors.grayScale4} style={localStyles.description}>
+                    {strings.minOrder}
+                    <GText type="r16" color={colors.appyellow} style={localStyles.description}>
+                      {product?.delivery.deliveryFee}
+                    </GText>
+                  </GText>
+                </View>
+                <GText type="r16" color={colors.grayScale4} style={localStyles.description}>
+                  {strings.within}
+                  <GText type="r16" color={colors.appyellow} style={localStyles.description}>
+                    {product?.delivery.distanceLimit}
+                  </GText>{strings.km}
+                </GText>
+              </View>
+            ) : (
+              <View style={localStyles.containerHeader}>
+                <GText type="r16" color={colors.grayScale4} style={localStyles.description}>
+                  {strings.deliveryNotAvailable}
+                </GText>
+              </View>
+            )}
           </View>
           <TouchableOpacity
             onPress={onPressReview}
@@ -259,12 +231,18 @@ const ProductDetail = ({route, navigation}) => {
             </GText>
             <View style={localStyles.ratingContainer}>
               <View style={localStyles.rating}>
-                <Rating rating={product?.rating} />
+                <Rating rating={product?.avgRating} />
               </View>
-              <ArrowNext />
+              {/* <ArrowNext /> */}
             </View>
           </TouchableOpacity>
         </View>
+        <FlatList
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={1}
+          data={menuItemData} // Assuming menusArray contains the list of menu items
+          renderItem={Menucardlayout}
+        />
       </ScrollView>
     </GSafeAreaView>
   );
@@ -277,8 +255,54 @@ const localStyles = StyleSheet.create({
     ...styles.flex,
     backgroundColor: colors.appblack,
   },
+  menuitems: {
+    ...styles.rowSpaceBetween,
+    ...styles.mh10,
+    backgroundColor: colors.appwhite,
+    ...styles.mv10,
+    borderRadius: moderateScale(15),
+  },
+  menuImage: {
+    backgroundColor: colors.grayScale4,
+    width: 80,
+    height: 80,
+    borderTopLeftRadius: moderateScale(15),
+    borderBottomLeftRadius: moderateScale(15),
+  },
+  menuitemdetails: {
+    flex: 1,
+    ...styles.m20,
+    marginVertical: moderateScale(10),
+  },
+  addButton: {
+    ...styles.center,
+    borderRadius: moderateScale(15),
+    height: moderateScale(28),
+    width: moderateScale(80),
+  },
+  menuDetails: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  Leftproductcontainer: {
+    ...styles.rowSpaceBetween,
+    ...styles.mt5,
+  },
+  ratingText: {
+    marginLeft: 5,
+    color: colors.appblack,
+  },
+  menutitle: {
+    ...styles.rowSpaceBetween,
+    gap: 10,
+  },
   imgContainer: {
-    backgroundColor: colors.appblack,
+    backgroundColor: colors.white,
     ...styles.center,
     ...styles.mt25,
     ...styles.mb30,
@@ -333,6 +357,10 @@ const localStyles = StyleSheet.create({
     ...styles.flexRow,
     ...styles.justifyBetween,
     ...styles.mb20,
+  },
+
+  containerHeader: {
+    ...styles.rowSpaceBetween,
   },
   btn: {
     width: getWidth(34),

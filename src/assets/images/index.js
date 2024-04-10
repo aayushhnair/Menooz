@@ -37,4 +37,5 @@ export default {
   map: require('./Map.png'),
   emptyStar: require('./emptyStar.png'),
   fillStar: require('./fillStar.png'),
+  defaultfoodimage : require('./Foodtemplate.png'),
 };

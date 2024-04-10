@@ -67,24 +67,32 @@ const Cart = ({navigation}) => {
     return getTotalOfMultiplyByKey(cartList, 'wight', 'quantity') + packWeight;
   };
 
+  
+    url = "https://i.redd.it/ea4u1b85f8wa1.jpg"
+
   const cartItem = ({item, index}) => {
     return (
       <View style={localStyles.item}>
         <View style={styles.flexRow}>
+        {item.imageUrl ? (
           <Image
-            source={item.imageLink}
+            source={{ uri: item.imageUrl }}
             resizeMode="contain"
-            style={{width: moderateScale(80), height: moderateScale(80)}}
+            style={{width: moderateScale(80), height: moderateScale(80), borderRadius: moderateScale(15)}}
           />
+        ) : (
+          <Image
+            source={{ uri: url }}
+            resizeMode="contain"
+            style={{width: moderateScale(80), height: moderateScale(80), borderRadius: moderateScale(15)}}
+          />
+        )}
           <View style={styles.ml20}>
-            <GText type="m16" color={colors.textColor}>
-              {item.productName}
+            <GText type="m16" color={colors.appblack}>
+              {item.name}
             </GText>
-            <GText type="m14" color={colors.labelColor} style={styles.mt5}>
-              {item.categoryID == 11
-                ? getTotalByKey(item.productList, 'wight')
-                : item.wight}
-              {strings.kg}
+            <GText type="m14" color={colors.appblack} style={styles.mt5}>
+              {strings.$}{item.price}
             </GText>
             <View style={[styles.flexRow, styles.mt10]}>
               <GButton
@@ -95,7 +103,7 @@ const Cart = ({navigation}) => {
               />
               <GText
                 type="m20"
-                color={colors.textColor}
+                color={colors.appblack}
                 align="center"
                 style={{...styles.mh20, ...styles.selfCenter}}>
                 {item.quantity}
@@ -115,9 +123,9 @@ const Cart = ({navigation}) => {
             icon={<Delete />}
             containerStyle={{height: moderateScale(0)}}
           />
-          <GText type="m20" color={colors.textColor} style={styles.mt15}>
+          <GText type="m20" color={colors.appblack} style={styles.mt15}>
             {strings.$}
-            {item.originalPrice}
+            {item.price}
           </GText>
         </View>
       </View>
@@ -154,7 +162,6 @@ const Cart = ({navigation}) => {
     return (
       <>
         <EmptyListComponent
-          icon={<EmptyCart />}
           title={strings.yourCartIsEmpty}
           description={strings.yourCartIsEmptyDescription}
           btnTitle={strings.startAdding}
@@ -273,7 +280,7 @@ export default Cart;
 const localStyles = StyleSheet.create({
   root: {
     ...styles.flex,
-    backgroundColor: colors.white,
+    backgroundColor: colors.appblack,
   },
   listStyle: {
     ...styles.flex,
@@ -281,11 +288,14 @@ const localStyles = StyleSheet.create({
     ...styles.mh20,
   },
   item: {
+    backgroundColor: colors.appwhite,
     ...styles.mv10,
+    ...styles.ph15,
     ...styles.rowSpaceBetween,
     paddingBottom: moderateScale(15),
-    borderBottomWidth: 1,
-    borderColor: colors.shadow2,
+    borderBottomWidth: 3,
+    borderRadius: moderateScale(15),
+    borderColor: colors.appyellow,
   },
   couponInput: {
     flex: 6,

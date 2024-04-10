@@ -1,5 +1,4 @@
 import {
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -7,13 +6,14 @@ import {
   Image,
   FlatList,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import { ScrollView } from 'react-native-virtualized-view'
+import React, { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 // Local Imports
 import GSafeAreaView from '../../components/common/GSafeAreaView';
-import {colors, styles} from '../../themes';
-import {DropDown, Location, Menu_Left, Search} from '../../assets/svgs';
+import { colors, styles } from '../../themes';
+import { DropDown, Location, Menu_Left, Search } from '../../assets/svgs';
 import {
   getHeight,
   getWidth,
@@ -24,26 +24,28 @@ import GText from '../../components/common/GText';
 import GButton from '../../components/common/GButton';
 import images from '../../assets/images';
 import strings from '../../i18n/strings';
-import {newItem, popularPack} from '../../Api/constant';
+import { newItem, popularPack } from '../../Api/constant';
 import Product from './product';
-import {StackNav} from '../../navigation/NavigationKeys';
+import { StackNav } from '../../navigation/NavigationKeys';
 import fetchRestaurantData from '../../Api/restaurantdata';
+import GInput from '../../components/common/GInput';
 
 const Home = () => {
 
   const [restaurants, setRestaurants] = useState([]);
-
+  const userLatitude = 13.047078;
+  const userLongitude = 80.120823;
   const [touch, setTouch] = useState(true);
+  const [value, setValue] = useState('');
+  const [distance, setDistance] = useState(6);
 
   useEffect(() => {
-    const unsubscribe = fetchRestaurantData((data) => {
-      console.log("\n\n\n\n\n\n\n\n Data Home: ", data ,"\n\n\n\n\n\n\n");
+    fetchRestaurantData(userLatitude, userLongitude, distance, (data) => {
       setRestaurants(data);
     });
-    
-    return () => unsubscribe();
+
   }, [touch]);
-    
+
 
   useEffect(() => {
     global.cart = [];
@@ -51,7 +53,7 @@ const Home = () => {
 
 
   const navigation = useNavigation();
-  const productCard = ({item, index}) => {
+  const productCard = ({ item, index }) => {
 
     return <Product item={item} index={index} />;
   };
@@ -76,15 +78,16 @@ const Home = () => {
     });
   };
   const navigateToSearch = () => {
-    navigation.navigate(StackNav.Search);
+    // navigation.navigate(StackNav.Search);
   };
 
-  const Section = ({sectionName, product}) => {
+
+  const Section = ({ sectionName, product }) => {
     const restaurantsArray = Object.values(product);
     return (
       <View>
         <View style={localStyles.sectionHeader}>
-          <GText color = {colors.appwhite} type="m18">{sectionName}</GText>
+          <GText color={colors.appwhite} type="m18">{sectionName}</GText>
           <GButton
             onPress={() => navigateToProductList(sectionName, product)}
             textType="b14"
@@ -93,12 +96,12 @@ const Home = () => {
           />
         </View>
         <View style={localStyles.itemContainer}>
-        <FlatList
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={1}
-          data={restaurantsArray}
-          renderItem={productCard}
-        />
+          <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={1}
+            data={restaurantsArray}
+            renderItem={productCard}
+          />
         </View>
       </View>
     );
@@ -111,22 +114,22 @@ const Home = () => {
           bgColor={colors.grayScale6}
           containerStyle={localStyles.button}></GButton> */}
         <View style={localStyles.location}>
-          <Location fill = {colors.appyellow}/>
+          <Location fill={colors.appyellow} />
           <View style={localStyles.locationText}>
             <View style={styles.rowCenter}>
-              <GText type="b14" style={styles.mb5} color = {colors.appyellow} >
+              <GText type="b14" style={styles.mb5} color={colors.appyellow} >
                 {strings.currLocation}
               </GText>
               <GButton
                 icon={<DropDown />}
                 containerStyle={localStyles.locationButton}></GButton>
             </View>
-            <GText type="r16" color = {colors.appwhite} >{strings.location}</GText>
+            <GText type="r16" color={colors.appwhite} >{strings.location}</GText>
           </View>
         </View>
         <GButton
           icon={<Search />}
-          bgColor={colors.appblack} 
+          bgColor={colors.appblack}
           onPress={navigateToSearch}
           containerStyle={localStyles.button}></GButton>
       </View>
@@ -167,6 +170,11 @@ const localStyles = StyleSheet.create({
     ...styles.center,
     ...styles.flexRow,
   },
+  locationinput: {
+    ...styles.rowSpaceBetween,
+    ...styles.mh10,
+    ...styles.mv10,
+  },
   locationText: {
     ...styles.ml15,
   },
@@ -180,6 +188,14 @@ const localStyles = StyleSheet.create({
     width: moderateScale(40),
     height: moderateScale(40),
     borderRadius: moderateScale(20),
+  },
+  locationButton1: {
+    borderRadius: moderateScale(15),
+    height: "10%",
+  },
+  rangebutton:{
+    width: '50%',
+    height: "80%",
   },
   itemContainer: {
     ...styles.center,
