@@ -49,6 +49,14 @@ export default function StackNavigation() {
         name={StackNav.Cart}
         component={StackRoute.Cart}
       />
+      <Stack.Screen 
+        name={StackNav.CheckOut}
+        component={StackRoute.CheckOut}
+      />
+      <Stack.Screen 
+        name={StackNav.OrderPage}
+        component={StackRoute.OrderPage}
+      />
     </Stack.Navigator>
   );
 }

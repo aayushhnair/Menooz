@@ -277,18 +277,15 @@ const Address = [
 ];
 
 const paymentMethodList = [
-  {
+  { 
+    paymentTrancsactionType: "UPI",
     paymentMethodId: 0,
-    paymentMethodName: 'Cash on Delivery',
-    paymentMethodIcon: <COD />,
-  },
-  {
-    paymentMethodId: 1,
     paymentMethodName: 'Pay Pal',
     paymentMethodIcon: <PayPal />,
   },
   {
-    paymentMethodId: 2,
+    paymentTrancsactionType: "CARD",
+    paymentMethodId: 1,
     paymentMethodName: 'Master Card',
     paymentMethodIcon: <MasterCard />,
   },

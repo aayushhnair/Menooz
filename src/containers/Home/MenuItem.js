@@ -43,10 +43,14 @@ MenuCard = React.memo(({ item, categoryName, index, getProduct }) => {
         });
       };
     
-
+      const [isClicked, setIsClicked] = useState(false);
     const onAddButtonPress = (item, index) => {
       return getProduct({ item: item, index: index });
+      setIsClicked(!isClicked);
     };
+    
+    
+    
     url = "https://i.redd.it/ea4u1b85f8wa1.jpg"
     return (
 
@@ -56,7 +60,6 @@ MenuCard = React.memo(({ item, categoryName, index, getProduct }) => {
 
           <GText style={{ ...styles.ml10 }} color={colors.appwhite} type="r16">{item.name}</GText>
           {menusubitems.map((menuItem, index) => (
-            <TouchableOpacity>
               <View key={index} style={localStyles.menuitems}>
 
                 {menuItem.imageUrl ? (
@@ -91,7 +94,6 @@ MenuCard = React.memo(({ item, categoryName, index, getProduct }) => {
                 </View>
 
               </View>
-            </TouchableOpacity>
           ))}
         </View>
       </View>
@@ -126,13 +128,12 @@ MenuCard = React.memo(({ item, categoryName, index, getProduct }) => {
     },
     addButton: {
       ...styles.center,
-      borderRadius: moderateScale(15),
+      borderRadius: moderateScale(8),
       height: moderateScale(28),
       width: moderateScale(80),
     },
     menuDetails: {
       flex: 1,
-      marginLeft: 10,
     },
     ratingContainer: {
       flexDirection: 'row',

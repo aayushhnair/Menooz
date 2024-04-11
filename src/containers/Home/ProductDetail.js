@@ -142,34 +142,19 @@ const ProductDetail = ({ route, navigation }) => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={localStyles.imgContainer}>
-          <Carousel
-            data={[product.imageLink, product.imageLink, product.imageLink]}
-            renderItem={ImageCarousel}
-            sliderWidth={screenWidth - 30}
-            itemWidth={screenWidth - 30}
-            onSnapToItem={index => setIndex(index)}
-            contentContainerStyle={styles.center}
+        <View style={styles.center}>
+        <Image
+          source={{ uri: product.imageUrl }}
+          resizeMode="cover"
+
+          style={localStyles.imgStyle}
+        />
+        {imageLoading ? (
+          <ActivityIndicator
+            style={[localStyles.imgStyle, { position: 'absolute' }]}
           />
-          <Pagination
-            dotsLength={3}
-            activeDotIndex={index}
-            dotStyle={[
-              localStyles.dotStyle,
-              {
-                width: getWidth(10),
-                backgroundColor: colors.appyellow,
-              },
-            ]}
-            inactiveDotStyle={[
-              localStyles.dotStyle,
-              {
-                width: getWidth(6),
-                backgroundColor: colors.appblack,
-              },
-            ]}
-            inactiveDotOpacity={1}
-            inactiveDotScale={1}
-          />
+        ) : null}
+      </View>
           <GButton
             onPress={addToFavorite}
             bgColor={colors.appblack}
@@ -237,12 +222,14 @@ const ProductDetail = ({ route, navigation }) => {
             </View>
           </TouchableOpacity>
         </View>
+        <View style={localStyles.menucontainer}>
         <FlatList
           keyExtractor={(item, index) => index.toString()}
           numColumns={1}
           data={menuItemData} // Assuming menusArray contains the list of menu items
           renderItem={Menucardlayout}
         />
+        </View>
       </ScrollView>
     </GSafeAreaView>
   );
@@ -406,4 +393,7 @@ const localStyles = StyleSheet.create({
     ...styles.g5,
     marginRight: 16,
   },
+  menucontainer : {
+    ...styles.mh10,
+  }
 });

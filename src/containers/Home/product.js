@@ -123,7 +123,7 @@ const localStyles = StyleSheet.create({
     borderRadius: moderateScale(20),
   },
   imageStyle: {
-    borderWidth: 1,
+    borderWidth: 10,
     borderColor: colors.grayScale5,
     borderTopLeftRadius: moderateScale(20),
     borderTopRightRadius: moderateScale(20),

@@ -54,7 +54,7 @@ function getTotalByKey(array, keyName) {
 function getTotalOfMultiplyByKey(array, key1, key2) {
   return array.reduce((total, item) => {
     if (item[key1] && item[key2]) {
-      return total + item[key1] * item[key2];
+      return +(total + item[key1] * item[key2]).toFixed(2); 
     }
     return total;
   }, 0);

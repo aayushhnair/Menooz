@@ -22,21 +22,23 @@ const Cart = ({navigation}) => {
   const [cartList, setCartList] = useState(global.cart);
   const [refreshing, setRefreshing] = useState(false);
   const [coupon, setCoupon] = useState('');
+  
 
   useEffect(() => {
     setCartList(global.cart);
   }, [global.cart]);
   const refresh = () => {
     setRefreshing(true);
-
     setRefreshing(false);
   };
+
   const increaseQuantity = index => {
     let temp = global.cart;
     temp[index].quantity = temp[index].quantity + 1;
     setCartList([...temp]);
     global.cart = temp;
   };
+
   const decreaseQuantity = index => {
     let temp = global.cart;
     if (temp[index].quantity == 1) return;
@@ -48,6 +50,7 @@ const Cart = ({navigation}) => {
   const navigateToCheckOut = () => {
     navigation.navigate(StackNav.CheckOut);
   };
+
   const deleteItem = index => {
     let temp = global.cart;
     temp.splice(index, 1);
@@ -55,26 +58,16 @@ const Cart = ({navigation}) => {
     global.cart = temp;
   };
 
-  const getTotalWeight = () => {
-    let packWeight = 0;
-    cartList.map(item => {
-      return item.categoryID == 11
-        ? (packWeight +=
-            getTotalByKey(item?.productList, 'wight', 'quantity') *
-            item.quantity)
-        : null;
-    });
-    return getTotalOfMultiplyByKey(cartList, 'wight', 'quantity') + packWeight;
-  };
 
   
-    url = "https://i.redd.it/ea4u1b85f8wa1.jpg"
+
 
   const cartItem = ({item, index}) => {
+    defaultimageurl = "https://i.redd.it/ea4u1b85f8wa1.jpg";
     return (
       <View style={localStyles.item}>
         <View style={styles.flexRow}>
-        {item.imageUrl ? (
+        {item.imageUrl != "" ? (
           <Image
             source={{ uri: item.imageUrl }}
             resizeMode="contain"
@@ -82,7 +75,7 @@ const Cart = ({navigation}) => {
           />
         ) : (
           <Image
-            source={{ uri: url }}
+            source={{ uri: defaultimageurl }}
             resizeMode="contain"
             style={{width: moderateScale(80), height: moderateScale(80), borderRadius: moderateScale(15)}}
           />
@@ -146,11 +139,11 @@ const Cart = ({navigation}) => {
     return (
       <View style={styles.mt15}>
         <View style={styles.rowSpaceBetween}>
-          <GText type="m16" color={colors.textColor}>
+          <GText type="m16" color={colors.appwhite}>
             {label}
           </GText>
 
-          <GText type="b16" color={colors.textColor}>
+          <GText type="b16" color={colors.appwhite}>
             {data}
           </GText>
         </View>
@@ -195,7 +188,7 @@ const Cart = ({navigation}) => {
       />
       {cartList.length > 0 && (
         <View style={localStyles.container2}>
-          <GText type={'b16'}>{strings.AddCoupon}</GText>
+          <GText color = {colors.appwhite} type={'b16'}>{strings.AddCoupon}</GText>
           <View style={localStyles.couponContainer}>
             <GInput
               value={coupon}
@@ -226,16 +219,13 @@ const Cart = ({navigation}) => {
               borderColor: colors.borderColor,
             }}>
             <Details label={strings.totalItem} data={cartList?.length} />
-            <Details
-              label={strings.weight}
-              data={getTotalWeight() + ' ' + strings.kg}
-            />
+
             <Details
               label={strings.price}
               data={
                 strings.$ +
                 ' ' +
-                getTotalOfMultiplyByKey(cartList, 'originalPrice', 'quantity')
+                getTotalOfMultiplyByKey(cartList, 'price', 'quantity')
               }
             />
             <Details
@@ -257,17 +247,17 @@ const Cart = ({navigation}) => {
               label={strings.totalPrice}
               data={
                 strings.$ +
-                getTotalOfMultiplyByKey(cartList, 'revisedPrice', 'quantity')
+                getTotalOfMultiplyByKey(cartList, 'price', 'quantity')
               }
             />
           </View>
           <GButton
             onPress={navigateToCheckOut}
             title={strings.checkOut}
-            bgColor={colors.green}
+            bgColor={colors.appyellow}
             containerStyle={localStyles.btnStyle}
             textType={'b16'}
-            color={colors.white}
+            color={colors.appblack}
           />
         </View>
       )}
@@ -290,10 +280,10 @@ const localStyles = StyleSheet.create({
   item: {
     backgroundColor: colors.appwhite,
     ...styles.mv10,
-    ...styles.ph15,
+    ...styles.p10,
     ...styles.rowSpaceBetween,
     paddingBottom: moderateScale(15),
-    borderBottomWidth: 3,
+    borderTopWidth: 3,
     borderRadius: moderateScale(15),
     borderColor: colors.appyellow,
   },
@@ -303,11 +293,10 @@ const localStyles = StyleSheet.create({
   },
   container: {
     ...styles.justifyBetween,
-    ...styles.g30,
     ...styles.mt15,
   },
   container2: {
-    flex: 1,
+    ...styles.pv10,
     ...styles.mh20,
   },
 

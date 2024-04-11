@@ -1,14 +1,14 @@
-import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState, useEffect, useRef} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import GSafeAreaView from '../../components/common/GSafeAreaView';
 import GHeader from '../../components/common/GHeader';
 import strings from '../../i18n/strings';
-import {colors, styles} from '../../themes';
+import { colors, styles } from '../../themes';
 import GText from '../../components/common/GText';
 import GButton from '../../components/common/GButton';
-import {Address, paymentMethodList} from '../../Api/constant';
-import {moderateScale} from '../../common/constants';
+import { Address, paymentMethodList } from '../../Api/constant';
+import { moderateScale } from '../../common/constants';
 import {
   RadioFilled,
   RadioUnfilled,
@@ -22,11 +22,12 @@ import {
   validateExpiryDate,
   validateName,
 } from '../../utils/validators';
-import {getDeviceType} from '../../utils/helpers';
+import { getDeviceType } from '../../utils/helpers';
 import GKeyBoardAvoidingWrapper from '../../components/common/GKeyBoardAvoidingWrapper';
-import {StackNav} from '../../navigation/NavigationKeys';
+import { StackNav } from '../../navigation/NavigationKeys';
 
 const CheckOut = () => {
+  const [paymentType, setPaymentType] = useState('UPI');
   const [addressList, setAddressList] = useState([]);
   const [paymentList, setPaymentList] = useState([]);
   const [isRememberCard, setIsRememberCard] = useState(false);
@@ -36,41 +37,47 @@ const CheckOut = () => {
     expiryDate: '',
     cvv: '',
   });
+  const [upiDetails, setUpiDetaiils] = useState({
+    upiType: '',
+    upiAddress: '',
+  });
   const [nameError, setNameError] = useState('');
   const [cardNumberError, setCardNumberError] = useState('');
   const [expiryDateError, setExpiryDateError] = useState('');
   const [cvvError, setCvvError] = useState('');
+  const emailRegex =
+  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 
   const navigation = useNavigation();
 
   useEffect(() => {
-    getAddressList();
     getPaymentList();
   }, []);
   const getAddressList = async () => {
     let tempAddress = Address.map(item => {
-      return {...item, is_selected: false};
+      return { ...item, is_selected: false };
     });
     tempAddress[0].is_selected = true;
     setAddressList(tempAddress);
   };
   const getPaymentList = async () => {
     let tempPayment = paymentMethodList.map(item => {
-      return {...item, is_selected: false};
+      return { ...item, is_selected: false };
     });
     tempPayment[0].is_selected = true;
     setPaymentList(tempPayment);
   };
   const selectAddress = index => {
     let tempAddress = addressList.map(item => {
-      return {...item, is_selected: false};
+      return { ...item, is_selected: false };
     });
     tempAddress[index].is_selected = true;
     setAddressList(tempAddress);
   };
   const selectPayment = index => {
     let tempPayment = paymentList.map(item => {
-      return {...item, is_selected: false};
+      return { ...item, is_selected: false };
     });
     tempPayment[index].is_selected = true;
     setPaymentList(tempPayment);
@@ -79,46 +86,19 @@ const CheckOut = () => {
   const changeIsRememberCardStatus = () => {
     setIsRememberCard(!isRememberCard);
   };
-  const addressComponent = ({item, index}) => {
-    return (
-      <TouchableOpacity
-        onPress={() => selectAddress(index)}
-        style={[
-          localStyles.addressView,
-          {
-            borderColor: item.is_selected ? colors.green : colors.shadow2,
-            backgroundColor: item.is_selected
-              ? colors.lightGreen2
-              : colors.white,
-          },
-        ]}>
-        <View style={localStyles.container}>
-          {item.is_selected ? <RadioFilled /> : <RadioUnfilled />}
-        </View>
-        <View style={localStyles.container2}>
-          <GText type={'b14'}>{item.addressName}</GText>
-          <GText type={'m14'} color={colors.labelColor}>
-            {item.contactNo}
-          </GText>
-          <GText type={'m14'} color={colors.labelColor}>
-            {item.address}
-          </GText>
-        </View>
-      </TouchableOpacity>
-    );
-  };
 
-  const paymentCard = ({item, index}) => {
+  const paymentCard = ({ item, index }) => {
+    
     return (
       <TouchableOpacity
-        onPress={() => selectPayment(index)}
+        onPress={() => {selectPayment(index) , setPaymentType(item.paymentTrancsactionType)}}
         style={[
           localStyles.paymentView,
           {
-            borderColor: item.is_selected ? colors.green : colors.shadow2,
+            borderColor: item.is_selected ? colors.appwhite : colors.grayScale5,
             backgroundColor: item.is_selected
-              ? colors.lightGreen2
-              : colors.white,
+              ? colors.appwhite
+              : colors.grayScale5,
           },
         ]}>
         <View style={[localStyles.container, localStyles.container2]}>
@@ -130,31 +110,42 @@ const CheckOut = () => {
   };
 
   const onChangeCardName = val => {
-    const {msg} = validateName(val.trim());
-    setCardDetails({...cardDetails, cardName: val.trim()});
+    const { msg } = validateName(val.trim());
+    setCardDetails({ ...cardDetails, cardName: val.trim() });
     setNameError(msg);
   };
 
   const onChangeExpiryDate = text => {
-    const {msg} = validateExpiryDate(text.trim());
+    const { msg } = validateExpiryDate(text.trim());
     setExpiryDateError(msg);
-    setCardDetails({...cardDetails, expiryDate: text});
+    setCardDetails({ ...cardDetails, expiryDate: text });
   };
 
   const onChangeCVV = val => {
-    const {msg} = validateCvv(val.trim());
+    const { msg } = validateCvv(val.trim());
     setCvvError(msg);
-    setCardDetails({...cardDetails, cvv: val});
+    setCardDetails({ ...cardDetails, cvv: val });
   };
 
   const onChangeCardNumber = val => {
-    const {msg} = validateCardNumber(val.replace(/\s/g, ''));
+    const { msg } = validateCardNumber(val.replace(/\s/g, ''));
     setCardNumberError(msg);
-    setCardDetails({...cardDetails, cardNumber: val});
+    setCardDetails({ ...cardDetails, cardNumber: val });
   };
+
+
+
+  const onChangeUpiID = val => {
+    const { msg } = emailRegex.test(val);
+    setUpiDetaiils({ ...upiDetails, upiAddress: val.trim() });
+    setNameError(msg);
+  };
+
   const onPressPayNow = () => {
     navigation.navigate(StackNav.OrderPage);
   };
+
+
   const handleCardDisplay = () => {
     if (cardDetails?.cardNumber && cardDetails?.cardNumber?.length > 0) {
       const rawText = [...cardDetails?.cardNumber?.split(' ').join('')]; // Remove old space
@@ -175,25 +166,9 @@ const CheckOut = () => {
     <GSafeAreaView style={localStyles.root}>
       <GHeader headerTitle={strings.checkOut} />
       <GKeyBoardAvoidingWrapper>
-        <View style={localStyles.addressSection}>
-          <View style={localStyles.addressTitle}>
-            <GText type={'m16'}>{strings.Select_address}</GText>
-            <GButton
-              title={strings.add + ' ' + strings.new}
-              textType={'b14'}
-              color={colors.green}
-              containerStyle={localStyles.addNewButton}
-            />
-          </View>
-          <FlatList
-            contentContainerStyle={localStyles.contentContainerStyle}
-            data={addressList}
-            renderItem={addressComponent}
-          />
-        </View>
         <View style={localStyles.paymentSection}>
           <View style={localStyles.paymentTitle}>
-            <GText type={'m16'}>{strings.selectPayment}</GText>
+            <GText color={colors.appwhite} type={'m16'}>{strings.selectPayment}</GText>
           </View>
           <FlatList
             data={paymentList}
@@ -204,7 +179,7 @@ const CheckOut = () => {
             showsHorizontalScrollIndicator={false}
           />
         </View>
-        <View style={[localStyles.cardDetailsView, styles.g15]}>
+        {paymentType === "CARD" ? (<View style={[localStyles.cardDetailsView, styles.g15]}>
           <GInput
             value={cardDetails.cardName}
             placeholder={strings.cardNamePlaceholder}
@@ -236,7 +211,7 @@ const CheckOut = () => {
               placeholder={strings.expiryDatePlaceHolder}
               placeholderTextColor={colors.labelColor}
               label={strings.expiryDate}
-              style={[{width: '46%'}]}
+              style={[{ width: '46%' }]}
               labelStyle={styles.mh0}
               maxLength={5}
               inputMode="default"
@@ -250,7 +225,7 @@ const CheckOut = () => {
               placeholder={strings.cvvPlaceholder}
               placeholderTextColor={colors.labelColor}
               label={strings.cvv}
-              style={[{width: '46%'}]}
+              style={[{ width: '46%' }]}
               labelStyle={styles.mh0}
               maxLength={3}
               keyboardType={'decimal-pad'}
@@ -262,7 +237,7 @@ const CheckOut = () => {
             />
           </View>
           <View style={localStyles.isRememberContainer}>
-            <GText type="m16">{strings.rememberCard}</GText>
+            <GText color = {colors.appwhite} type="m16">{strings.rememberCard}</GText>
             <TouchableOpacity onPress={changeIsRememberCardStatus}>
               {isRememberCard ? (
                 <Switch_on />
@@ -271,14 +246,29 @@ const CheckOut = () => {
               )}
             </TouchableOpacity>
           </View>
+        </View>) : (<View style={[localStyles.cardDetailsView, styles.g15]}>
+          <GInput
+            value={upiDetails.upiAddress}
+            placeholder={strings.upiID}
+            placeholderTextColor={colors.labelColor}
+            label={strings.upiID}
+            labelStyle={styles.mh0}
+            errorStyle={styles.mh0}
+            toGetTextFieldValue={onChangeUpiID}
+            _errorText={nameError}
+            innerInputStyle={innerInputStyle()}
+            inputStyle={localStyles.inputStyle}
+          />
         </View>
+        )}
+
         <GButton
           onPress={onPressPayNow}
           containerStyle={localStyles.checkOutButton}
           title={strings.payNow}
-          bgColor={colors.green}
+          bgColor={colors.appyellow}
           textType={'b16'}
-          color={colors.white}
+          color={colors.appblack}
         />
       </GKeyBoardAvoidingWrapper>
     </GSafeAreaView>
@@ -290,7 +280,7 @@ export default CheckOut;
 const localStyles = StyleSheet.create({
   root: {
     ...styles.flex,
-    backgroundColor: colors.white,
+    backgroundColor: colors.appblack,
   },
   addressSection: {},
   paymentSection: {},

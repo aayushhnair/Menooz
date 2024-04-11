@@ -79,5 +79,5 @@ To learn more about React Native, take a look at the following resources:
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
 
 
-$ export JAVA_HOME="C:\Program Files\Java\jdk-17"
-$ export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME="C:\Program Files\Java\jdk-17"
+export PATH="$JAVA_HOME/bin:$PATH"

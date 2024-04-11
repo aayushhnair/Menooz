@@ -1,4 +1,5 @@
 export default {
+  upiID: 'UPI ID',
   minOrder: "Unlock Free Delivery on Orders over ₹ ",
   deliveryNotAvailable: "Home delivery not available : (",
   within: "within ",

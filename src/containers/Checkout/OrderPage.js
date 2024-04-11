@@ -69,9 +69,9 @@ const OrderPage = () => {
 
   return (
     <GSafeAreaView style={localStyles.root}>
-      <View style={{alignItems: 'center'}}>
+      <View style={localStyles.mainContainer}>
         <View style={localStyles.container}>{GetDetails('Icon')}</View>
-        <GText type="b26" color={colors.textColor} style={styles.mt40}>
+        <GText type="b26" color={colors.appwhite} style={styles.mt40}>
           {GetDetails('Title')}
         </GText>
         <GText
@@ -85,9 +85,9 @@ const OrderPage = () => {
       <GButton
         textType="b16"
         title={status == 'success' ? strings.continue : strings.tryAgain}
-        bgColor={colors.green}
+        bgColor={colors.appyellow}
         containerStyle={[styles.mt40, styles.mh20]}
-        color={colors.white}
+        color={colors.appblack}
         onPress={onButtonPressed}
       />
     </GSafeAreaView>
@@ -100,14 +100,19 @@ const localStyles = StyleSheet.create({
   root: {
     ...styles.flex,
     ...styles.justifyCenter,
-    backgroundColor: colors.white,
+    backgroundColor: colors.appblack,
+  },
+  mainContainer: {
+    ...styles.mh20,
+    alignSelf: 'center',
   },
   container: {
     width: moderateScale(260),
     height: moderateScale(260),
-    backgroundColor: colors.lightGreen2,
+    backgroundColor: colors.appyellow,
     borderRadius: moderateScale(200),
     ...styles.center,
+
     alignSelf: 'center',
   },
 });
