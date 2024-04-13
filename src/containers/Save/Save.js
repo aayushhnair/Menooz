@@ -35,6 +35,7 @@ const Save = ({navigation}) => {
     temp.splice(index, 1);
     setFavoriteList(temp);
   };
+  
   const favoriteItem = ({item, index}) => {
     return (
       <View style={localStyles.item}>
@@ -109,7 +110,7 @@ export default Save;
 const localStyles = StyleSheet.create({
   root: {
     ...styles.flex,
-    backgroundColor: colors.white,
+    backgroundColor: colors.appblack,
   },
   listStyle: {
     ...styles.mt25,

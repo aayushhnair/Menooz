@@ -1,11 +1,9 @@
 import {
   StyleSheet,
-  Text,
   View,
   Image,
-  TouchableWithoutFeedback,
   TouchableOpacity,
-  ImageBackground,
+  Alert
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
@@ -16,19 +14,26 @@ import strings from '../../i18n/strings';
 import { moderateScale, screenWidth } from '../../common/constants';
 import { Heart, HeartFilled, Plus, Star_Filled, Star_Unfiiled } from '../../assets/svgs';
 import { StackNav } from '../../navigation/NavigationKeys';
-import { getTotalByKey } from '../../utils/helpers';
 import { useState } from 'react';
+import PopupModal from '../../components/customComponent.js/PopUp';
 
-const Product = ({ item, index, categoryName, getProduct }) => {
+const Product = ({ item, index, id, categoryName, getProduct }) => {
   const navigation = useNavigation();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const navigateToDetail = () => {
+    if(isRestaurantOpen()){
     navigation.navigate(StackNav.ProductDetail, {
       product: item,
       categoryName: categoryName,
       status: isRestaurantOpen(),
-    });
+      restaurantID: id,
+    });}else{
+      setIsModalVisible(true);
+    }
   };
-  const [isClicked, setIsClicked] = useState(false);
+
+  
   const now = new Date();
   const dayOfWeek = now.getDay();
   const currentHour = now.getHours();
@@ -38,8 +43,10 @@ const Product = ({ item, index, categoryName, getProduct }) => {
   const showOpenhour = openingHour ? openingHour.split(':').slice(0, 2).join(':') : '';
   const showClosehour = closingHour ? closingHour.split(':').slice(0, 2).join(':') : '';
   const [ratingStar, setRatingStar] = useState([1, 2, 3, 4, 5]);
-  const onAddButtonPress = () => {
-    setIsClicked(!isClicked);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const addToFavorite = () => {
+    setIsFavorite(!isFavorite);
   };
 
   const Rating = ({ rating }) => {
@@ -70,7 +77,7 @@ const Product = ({ item, index, categoryName, getProduct }) => {
     return false;
   };
 
-
+  
   return (
     <TouchableOpacity onPress={navigateToDetail} style={[localStyles.product, !isRestaurantOpen() && localStyles.overlay]}>
       <View style={styles.center}>
@@ -102,13 +109,16 @@ const Product = ({ item, index, categoryName, getProduct }) => {
           </GText>
           <GButton
             onPress={() => {
-              onAddButtonPress();
+              addToFavorite();
             }}
-            icon={isClicked ? <HeartFilled /> : <Heart />}
+            icon={isFavorite ? <HeartFilled /> : <Heart  fill ={colors.grayScale7}/>}
             containerStyle={localStyles.addButton}
           />
         </View>
       </View>
+      {isModalVisible && (
+        <PopupModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} stringToShow={strings.shopClosed} />
+      )}
     </TouchableOpacity>
   );
 };
@@ -123,8 +133,8 @@ const localStyles = StyleSheet.create({
     borderRadius: moderateScale(20),
   },
   imageStyle: {
-    borderWidth: 10,
-    borderColor: colors.grayScale5,
+    // borderWidth: 10,
+    // borderColor: colors.white,
     borderTopLeftRadius: moderateScale(20),
     borderTopRightRadius: moderateScale(20),
     width: '100%',

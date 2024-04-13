@@ -7,7 +7,7 @@ import strings from '../../i18n/strings';
 import { colors, styles } from '../../themes';
 import GText from '../../components/common/GText';
 import GButton from '../../components/common/GButton';
-import { Address, paymentMethodList } from '../../Api/constant';
+import { Address, paymentMethodList, restaurent } from '../../Api/constant';
 import { moderateScale } from '../../common/constants';
 import {
   RadioFilled,
@@ -25,12 +25,15 @@ import {
 import { getDeviceType } from '../../utils/helpers';
 import GKeyBoardAvoidingWrapper from '../../components/common/GKeyBoardAvoidingWrapper';
 import { StackNav } from '../../navigation/NavigationKeys';
+import postOrderData from '../../Api/orderPostAPI';
 
-const CheckOut = () => {
+const CheckOut = ({route}) => {
   const [paymentType, setPaymentType] = useState('UPI');
   const [addressList, setAddressList] = useState([]);
   const [paymentList, setPaymentList] = useState([]);
   const [isRememberCard, setIsRememberCard] = useState(false);
+  const restaurantID = route?.params.restaurantID;
+
   const [cardDetails, setCardDetails] = useState({
     cardName: '',
     cardNumber: '',
@@ -54,13 +57,7 @@ const CheckOut = () => {
   useEffect(() => {
     getPaymentList();
   }, []);
-  const getAddressList = async () => {
-    let tempAddress = Address.map(item => {
-      return { ...item, is_selected: false };
-    });
-    tempAddress[0].is_selected = true;
-    setAddressList(tempAddress);
-  };
+
   const getPaymentList = async () => {
     let tempPayment = paymentMethodList.map(item => {
       return { ...item, is_selected: false };
@@ -68,13 +65,7 @@ const CheckOut = () => {
     tempPayment[0].is_selected = true;
     setPaymentList(tempPayment);
   };
-  const selectAddress = index => {
-    let tempAddress = addressList.map(item => {
-      return { ...item, is_selected: false };
-    });
-    tempAddress[index].is_selected = true;
-    setAddressList(tempAddress);
-  };
+
   const selectPayment = index => {
     let tempPayment = paymentList.map(item => {
       return { ...item, is_selected: false };
@@ -140,8 +131,9 @@ const CheckOut = () => {
     setUpiDetaiils({ ...upiDetails, upiAddress: val.trim() });
     setNameError(msg);
   };
-
+  const defaultCoustomr = "8682888400";
   const onPressPayNow = () => {
+    postOrderData(restaurantID, global.cart, defaultCoustomr)
     navigation.navigate(StackNav.OrderPage);
   };
 

@@ -29,6 +29,7 @@ import Product from './product';
 import { StackNav } from '../../navigation/NavigationKeys';
 import fetchRestaurantData from '../../Api/restaurantdata';
 import GInput from '../../components/common/GInput';
+import PopupModal from '../../components/customComponent.js/PopUp';
 
 const Home = () => {
 
@@ -37,7 +38,10 @@ const Home = () => {
   const userLongitude = 80.120823;
   const [touch, setTouch] = useState(true);
   const [value, setValue] = useState('');
-  const [distance, setDistance] = useState(6);
+  const [distance, setDistance] = useState(3);
+  const restaurantKeys = Object.keys(restaurants);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
 
   useEffect(() => {
     fetchRestaurantData(userLatitude, userLongitude, distance, (data) => {
@@ -47,15 +51,10 @@ const Home = () => {
   }, [touch]);
 
 
-  useEffect(() => {
-    global.cart = [];
-  }, []);
-
 
   const navigation = useNavigation();
   const productCard = ({ item, index }) => {
-
-    return <Product item={item} index={index} />;
+    return <Product item={item} index={index} id={restaurantKeys[index]} />;
   };
 
   // function addToCart(data) {
@@ -146,6 +145,9 @@ const Home = () => {
         {/* <Section sectionName={strings.newItem} product={popularPack} /> */}
         <Section sectionName={strings.newItem} product={restaurants} />
       </ScrollView>
+      {isModalVisible && (
+        <PopupModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} stringToShow={strings.cartCleared} />
+      )}
     </GSafeAreaView>
   );
 };

@@ -32,10 +32,11 @@ import {
   } from '../../assets/svgs';
   import { StackNav } from '../../navigation/NavigationKeys';
 
-MenuCard = React.memo(({ item, categoryName, index, getProduct }) => {
+MenuCard = React.memo(({ item, categoryName,id , index, getProduct }) => {
     
     const [ratingStar, setRatingStar] = useState([1, 2, 3, 4, 5]);
     const menusubitems = Object.values(item.items);
+
 
     const Rating = ({ rating }) => {
         return ratingStar.map(item => {
@@ -44,8 +45,8 @@ MenuCard = React.memo(({ item, categoryName, index, getProduct }) => {
       };
     
       const [isClicked, setIsClicked] = useState(false);
-    const onAddButtonPress = (item, index) => {
-      return getProduct({ item: item, index: index });
+    const onAddButtonPress = (item, index, storeID) => {;
+      return getProduct({ item: item, index: index, storeID: storeID });
       setIsClicked(!isClicked);
     };
     
@@ -85,7 +86,7 @@ MenuCard = React.memo(({ item, categoryName, index, getProduct }) => {
                     </View>
                     <GButton
                       onPress={() => {
-                        onAddButtonPress(menuItem, index);
+                        onAddButtonPress(menuItem, index, id);
                       }}
                       icon={<Plus />}
                       bgColor={colors.appyellow}

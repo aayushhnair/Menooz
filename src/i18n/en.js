@@ -6,6 +6,8 @@ export default {
   km : " km distance",
   app_start_name: 'the',
   app_name: 'Menooz',
+  shopClosed: "Oops! It looks like the store is taking a break right now. Please check back later!",
+  cartCleared: "Uh oh! Your cart has been cleared. Time to start filling it up again!",
   app_domain: '.ai',
   ratings: 'Rating : ',
   submit: 'Submit',

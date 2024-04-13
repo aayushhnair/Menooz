@@ -7,9 +7,10 @@ import {
   FlatList,
   TouchableOpacity,
   Linking,
+  Alert,
 } from 'react-native';
-import React, { useState,useEffect } from 'react';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+import React, { useState, useEffect } from 'react';
+import GText from '../../components/common/GText';
 import GSafeAreaView from '../../components/common/GSafeAreaView';
 import GHeader from '../../components/common/GHeader';
 import { colors, styles } from '../../themes';
@@ -20,7 +21,6 @@ import {
   moderateScale,
   screenWidth,
 } from '../../common/constants';
-import GText from '../../components/common/GText';
 import GButton from '../../components/common/GButton';
 import {
   Plus,
@@ -29,75 +29,58 @@ import {
   HeartFilled,
   Star_Filled,
   Star_Unfiiled,
+  Cart_2,
 } from '../../assets/svgs';
 import { StackNav } from '../../navigation/NavigationKeys';
 import { getProduct } from 'react-native-device-info';
 import MenuCard from './MenuItem';
+import PopupModal from '../../components/customComponent.js/PopUp';
 
 const ProductDetail = ({ route, navigation }) => {
   const categoryName = route?.params.categoryName;
   const product = route?.params.product;
   const status = route?.params.status;
+  const restaurantID = route?.params.restaurantID;
   const [imageLoading, setImageLoading] = useState(false);
   const [index, setIndex] = useState(0);
   const [ratingStar, setRatingStar] = useState([1, 2, 3, 4, 5]);
   const [isFavorite, setIsFavorite] = useState(false);
   const [quantity, setQuantity] = useState(1);
-
-  const onLoad = () => {
-    setImageLoading(true);
-  };
-  const onLoadEnd = () => {
-    setImageLoading(false);
-  };
-
+  const [cartCounter, setCartCounter] = useState(0);
+  const [isModalVisible, setIsModalVisible] = useState(true);
 
 
   useEffect(() => {
     global.cart = [];
   }, []);
 
-
-
   const onPressReview = () => navigation.navigate(StackNav.Review);
-
   function addToCart(data) {
     if (global.cart) {
-      if (global.cart.some(item => item.name == data.item.name)) {
+      if (global.cart.some(item => item.name === data.item.name)) {
         let itemIndex = global.cart.findIndex(
-          item => item.name == data.item.name,
+          item => item.name === data.item.name
         );
-        global.cart[itemIndex].quantity = global.cart[itemIndex].quantity + 1;
+        global.cart[itemIndex].quantity += 1;
       } else {
         data.item.quantity = 1;
         global.cart.push(data.item);
       }
     }
+    // Calculate total quantity
+    let totalQuantity = 0;
+    if (global.cart) {
+      totalQuantity = global.cart.reduce((total, item) => total + item.quantity, 0);
+    }
+    setCartCounter(totalQuantity);
   }
 
-  const ImageCarousel = ({ item, index }) => {
-    return (
-      <View style={styles.center}>
-        <Image
-          source={{ uri: product.imageUrl }}
-          resizeMode="cover"
-          onLoadStart={onLoad}
-          onLoadEnd={onLoadEnd}
-          style={localStyles.imgStyle}
-        />
-        {imageLoading ? (
-          <ActivityIndicator
-            style={[localStyles.imgStyle, { position: 'absolute' }]}
-          />
-        ) : null}
-      </View>
-    );
-  };
 
 
   const addToFavorite = () => {
     setIsFavorite(!isFavorite);
   };
+
   const Rating = ({ rating }) => {
     return ratingStar.map(item => {
       return item <= rating ? <Star_Filled /> : <Star_Unfiiled />;
@@ -105,13 +88,15 @@ const ProductDetail = ({ route, navigation }) => {
   };
 
   const navigateToCart = () => {
-    navigation.navigate(StackNav.Cart);
+    navigation.navigate(StackNav.Cart, {
+      restaurantID: restaurantID,
+    });
   };
 
   const menuItemData = Object.values(product.menuData);
 
   const Menucardlayout = ({ item, index }) => {
-    return <MenuCard item={item} index={index} getProduct={addToCart} />;
+    return <MenuCard item={item} index={index} id={restaurantID} getProduct={addToCart} />;
   };
 
 
@@ -142,19 +127,19 @@ const ProductDetail = ({ route, navigation }) => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={localStyles.imgContainer}>
-        <View style={styles.center}>
-        <Image
-          source={{ uri: product.imageUrl }}
-          resizeMode="cover"
+          <View style={styles.center}>
+            <Image
+              source={{ uri: product.imageUrl }}
+              resizeMode="cover"
 
-          style={localStyles.imgStyle}
-        />
-        {imageLoading ? (
-          <ActivityIndicator
-            style={[localStyles.imgStyle, { position: 'absolute' }]}
-          />
-        ) : null}
-      </View>
+              style={localStyles.imgStyle}
+            />
+            {imageLoading ? (
+              <ActivityIndicator
+                style={[localStyles.imgStyle, { position: 'absolute' }]}
+              />
+            ) : null}
+          </View>
           <GButton
             onPress={addToFavorite}
             bgColor={colors.appblack}
@@ -167,16 +152,15 @@ const ProductDetail = ({ route, navigation }) => {
             <GText type="b24" color={colors.appyellow}>
               {product?.restaurantName}
             </GText>
-            {product.restaurantPhoneNumber == "" || !status ? (<TouchableOpacity>
-              <View style={styles.phoneContainer}>
+            <TouchableOpacity onPress={navigateToCart} >
+              <View style={localStyles.phoneIconContainer}>
+                <Cart_2 />
+                <View style={localStyles.cartCounterContainer} >
+                  <GText type="r16" color={colors.grayScale4} >
+                    {cartCounter}
+                  </GText></View>
               </View>
-            </TouchableOpacity>) :
-              (<TouchableOpacity onPress={() => { Linking.openURL(`tel:${product.restaurantPhoneNumber}`) }} >
-                <View style={styles.phoneContainer}>
-                  <CallIcon />
-                </View>
-              </TouchableOpacity>)
-            }
+            </TouchableOpacity>
           </View>
           {/* Product Details */}
           <View style={localStyles.container3}>
@@ -223,14 +207,17 @@ const ProductDetail = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
         <View style={localStyles.menucontainer}>
-        <FlatList
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={1}
-          data={menuItemData} // Assuming menusArray contains the list of menu items
-          renderItem={Menucardlayout}
-        />
+          <FlatList
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={1}
+            data={menuItemData} // Assuming menusArray contains the list of menu items
+            renderItem={Menucardlayout}
+          />
         </View>
       </ScrollView>
+      {/* {isModalVisible && (
+        <PopupModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} stringToShow={strings.shopClosed} />
+      )} */}
     </GSafeAreaView>
   );
 };
@@ -289,14 +276,27 @@ const localStyles = StyleSheet.create({
     gap: 10,
   },
   imgContainer: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.appblack,
     ...styles.center,
     ...styles.mt25,
-    ...styles.mb30,
+    ...styles.mb20,
     ...styles.mh15,
     borderRadius: moderateScale(22),
 
   },
+  phoneIconContainer: {
+    ...styles.rowSpaceBetween,
+    gap: 10,
+    borderWidth: 2,
+    borderColor: colors.appyellow,
+    borderRadius: 50,
+    padding: 12,
+  },
+  cartCounterContainer: {
+    ...styles.center,
+    padding: 2,
+  },
+
   imgStyle: {
     borderTopRightRadius: moderateScale(22),
     borderTopLeftRadius: moderateScale(22),
@@ -393,7 +393,7 @@ const localStyles = StyleSheet.create({
     ...styles.g5,
     marginRight: 16,
   },
-  menucontainer : {
+  menucontainer: {
     ...styles.mh10,
   }
 });

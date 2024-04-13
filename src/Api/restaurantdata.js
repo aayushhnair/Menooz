@@ -14,26 +14,23 @@ const firebaseConfig = {
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-const fetchRestaurantData = (userLatitude, userLongitude, maxDistance, callback) => {
+  const fetchRestaurantData = (userLatitude, userLongitude, maxDistance, callback) => {
     const reference = ref(db, '/Restaurants');
     onValue(reference, (snapshot) => {
         const data = snapshot.val();
-        const restaurants = [];
+        const filteredRestaurants = {};
 
         if (data) {
             Object.keys(data).forEach((key) => {
                 const restaurant = data[key];
                 const distance = calculateDistance(userLatitude, userLongitude, restaurant.location.latitude, restaurant.location.longitude);
                 if (distance <= maxDistance) {
-                    restaurants.push({ ...restaurant, distance }); // Add distance property to each restaurant
+                    filteredRestaurants[key] = { ...restaurant, distance }; // Add restaurant to filteredRestaurants object
                 }
             });
         }
         
-        // Sort restaurants based on distance (nearest first)
-        restaurants.sort((a, b) => a.distance - b.distance);
-        
-        callback(restaurants);
+        callback(filteredRestaurants); // Return filtered restaurants as an object
     });
 };
 

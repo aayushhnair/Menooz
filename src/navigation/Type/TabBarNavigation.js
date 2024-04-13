@@ -42,7 +42,7 @@ export default function TabBarNavigation({navigation}) {
       case TabNav.Profile:
         icon = routeName == selectedTab ? <Profile_Selected /> : <Profile />;
         break;
-      case StackNav.Cart:
+      case TabNav.Save:
         icon = <Heart />;
         break;
     }
@@ -93,11 +93,11 @@ export default function TabBarNavigation({navigation}) {
         type="DOWN"
         shadowStyle={localStyles.shadow}
         renderCircle={({selectedTab, navigate}) => (
-          <TouchableOpacity onPress={() => navigation.navigate(StackNav.Cart)}>
+          <TouchableOpacity onPress={() => navigation.navigate(TabNav.Save)}>
             <Animated.View style={localStyles.btnCircleUp}>
               <TabText
                 style={localStyles.cartButton}
-                routeName={StackNav.Cart}
+                routeName={TabNav.Save}
               />
             </Animated.View>
           </TouchableOpacity>
@@ -112,8 +112,8 @@ export default function TabBarNavigation({navigation}) {
         />
         <Tab.Screen
           position="CIRCLE"
-          name={StackNav.Cart}
-          component={StackNav.Cart}
+          name={TabNav.Save}
+          component={TabRoute.Save}
         />
         <Tab.Screen
           position="RIGHT"

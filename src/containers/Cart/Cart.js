@@ -17,16 +17,19 @@ import {
 import EmptyListComponent from '../../components/customComponent.js/EmptyListComponent';
 import GInput from '../../components/common/GInput';
 import {StackNav} from '../../navigation/NavigationKeys';
+import { restaurent } from '../../Api/constant';
 
-const Cart = ({navigation}) => {
+const Cart = ({route, navigation}) => {
   const [cartList, setCartList] = useState(global.cart);
   const [refreshing, setRefreshing] = useState(false);
   const [coupon, setCoupon] = useState('');
+  const restaurantID = route?.params.restaurantID;
   
 
   useEffect(() => {
     setCartList(global.cart);
   }, [global.cart]);
+ 
   const refresh = () => {
     setRefreshing(true);
     setRefreshing(false);
@@ -48,7 +51,9 @@ const Cart = ({navigation}) => {
   };
 
   const navigateToCheckOut = () => {
-    navigation.navigate(StackNav.CheckOut);
+    navigation.navigate(StackNav.CheckOut, {
+      restaurantID: restaurantID,
+    });
   };
 
   const deleteItem = index => {
