@@ -1,4 +1,4 @@
-package com.grocery;
+package com.menooz.app;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

@@ -1,5 +1,5 @@
 {
-  "name": "grocery",
+  "name": "menooz",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -12,6 +12,9 @@
     "release-android": "react-native run-android --variant=release"
   },
   "dependencies": {
+    "@firebase/app": "^0.10.1",
+    "@firebase/auth": "^1.7.1",
+    "@firebase/database": "^1.0.4",
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
     "@react-native-async-storage/async-storage": "^1.19.3",
     "@react-native-community/clipboard": "^1.5.1",
@@ -25,7 +28,7 @@
     "@shopify/flash-list": "^1.6.2",
     "deprecated-react-native-prop-types": "^5.0.0",
     "expo-document-picker": "^11.10.1",
-    "firebase": "^10.10.0",
+    "firebase": "^10.11.0",
     "moment": "^2.29.4",
     "react": "18.2.0",
     "react-native": "0.72.6",

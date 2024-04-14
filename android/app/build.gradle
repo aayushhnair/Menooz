@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.grocery"
+    namespace "com.menooz.app"
     defaultConfig {
-        applicationId "com.grocery"
+        applicationId "com.menooz.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

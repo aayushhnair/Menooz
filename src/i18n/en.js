@@ -1,4 +1,7 @@
 export default {
+  invalidUser: "Sorry, Your Account is not in our Database,Come onboard Sign up.",
+  newUser: "Welcome to the menooz restaurants choice",
+  pleaseEnter: "Please enter valid Name, Email and Password",
   upiID: 'UPI ID',
   minOrder: "Unlock Free Delivery on Orders over ₹ ",
   deliveryNotAvailable: "Home delivery not available : (",

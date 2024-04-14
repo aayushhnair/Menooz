@@ -1,32 +1,35 @@
 // Library imports
-import {StyleSheet, Image, TouchableOpacity, View} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import { StyleSheet, Image, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
 
 // Local Imports
 import GSafeAreaView from '../../components/common/GSafeAreaView';
-import {colors, styles} from '../../themes';
-import {CartGreen, Eye_checked, Eye_icon, Logo} from '../../assets/svgs';
-import {moderateScale} from '../../common/constants';
+import { colors, styles } from '../../themes';
+import { CartGreen, Eye_checked, Eye_icon, Logo } from '../../assets/svgs';
+import { moderateScale } from '../../common/constants';
 import strings from '../../i18n/strings';
 import GText from '../../components/common/GText';
 import margin from '../../themes/margin';
 import GInput from '../../components/common/GInput';
 import GButton from '../../components/common/GButton';
-import {validatePassword, validateEmail} from '../../utils/validators';
-import {StackNav} from '../../navigation/NavigationKeys';
+import { validatePassword, validateEmail } from '../../utils/validators';
+import { StackNav } from '../../navigation/NavigationKeys';
 import GKeyBoardAvoidingWrapper from '../../components/common/GKeyBoardAvoidingWrapper';
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
+import app from '../../Api/firebaseconfig';
+import { getAuth, signInWithEmailAndPassword } from '@firebase/auth';
+import PopupModal from '../../components/customComponent.js/PopUp';
 
 const Login = ({ navigation }) => {
-
-  const {navigate} = useNavigation()
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { navigate } = useNavigation()
   const [passwordVisibility, setPasswordVisibility] = useState(false);
   const [Email, setEmail] = useState('');
   const [EmailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-  
+
 
   useEffect(() => {
     if (
@@ -63,12 +66,27 @@ const Login = ({ navigation }) => {
   };
 
   const onLoginBtnPress = () => {
-    navigation.navigate(StackNav.TabBar);
+    const auth = getAuth(app);
+
+    signInWithEmailAndPassword(auth, Email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("\n\nuser: ",user)
+        navigation.navigate(StackNav.TabBar);
+     
+      })
+      .catch((error) => {
+        setIsModalVisible(true);
+        console.error('Error signing in:', error);
+      });
+
     // navigation.reset({
     //   index: 0,
     //   routes: [{ name: StackNav.TabBar }],
     // });
   };
+
+
 
   const onForgotPassword = () => {
     navigation.navigate(StackNav.ForgotPassword);
@@ -84,7 +102,7 @@ const Login = ({ navigation }) => {
         <View style={localStyles.mainContainer}>
           <View style={localStyles.logoContainer}>
             <Image
-              source={require('../../assets/images/Logo.png')} 
+              source={require('../../assets/images/Logo.png')}
               style={{ width: moderateScale(100), height: moderateScale(100) }}
             />
           </View>
@@ -145,6 +163,9 @@ const Login = ({ navigation }) => {
             />
           </View>
         </View>
+        {isModalVisible && (
+        <PopupModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} stringToShow={strings.invalidUser} />
+      )}
       </GKeyBoardAvoidingWrapper>
     </GSafeAreaView>
   );

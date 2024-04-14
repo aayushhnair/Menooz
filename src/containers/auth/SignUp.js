@@ -5,62 +5,66 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import PopupModal from '../../components/customComponent.js/PopUp';
+import React, { useEffect, useState } from 'react';
 import GSafeAreaView from '../../components/common/GSafeAreaView';
-import {colors, styles} from '../../themes';
+import { colors, styles } from '../../themes';
 import GText from '../../components/common/GText';
 import strings from '../../i18n/strings';
-import {getHeight, moderateScale} from '../../common/constants';
+import { getHeight, moderateScale } from '../../common/constants';
 import GInput from '../../components/common/GInput';
 import {
+  validateEmail,
   validateName,
   validatePassword,
-  validatePhoneNumber,
-} from '../../utils/validators';
-import {Eye_checked, Eye_icon, Next_Arrow} from '../../assets/svgs';
-import GButton from '../../components/common/GButton';
-import {StackNav} from '../../navigation/NavigationKeys';
-import GKeyBoardAvoidingWrapper from '../../components/common/GKeyBoardAvoidingWrapper';
 
-const SignUp = ({navigation}) => {
+} from '../../utils/validators';
+import { Eye_checked, Eye_icon, Next_Arrow } from '../../assets/svgs';
+import GButton from '../../components/common/GButton';
+import { StackNav } from '../../navigation/NavigationKeys';
+import GKeyBoardAvoidingWrapper from '../../components/common/GKeyBoardAvoidingWrapper';
+import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
+
+const SignUp = ({ navigation }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [name, setName] = useState('');
   const [nameError, setNameError] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [phoneNumberError, setPhoneNumberError] = useState('');
+  const [Email, setPhoneNumber] = useState('');
+  const [EmailError, setEmailError] = useState('');
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [isNextDisabled, setIsNextDisabled] = useState(true);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
     if (
       name.length > 0 &&
       !nameError &&
-      phoneNumber.length > 0 &&
+      Email.length > 0 &&
       password.length > 0 &&
-      !phoneNumberError &&
+      !EmailError &&
       !passwordError
     ) {
       setIsNextDisabled(false);
     } else {
       setIsNextDisabled(true);
     }
-  }, [phoneNumber, phoneNumberError, password, passwordError]);
+  }, [Email, EmailError, password, passwordError]);
 
   const onChangedName = val => {
-    const {msg} = validateName(val.trim());
+    const { msg } = validateName(val.trim());
     setName(val.trim());
     setNameError(msg);
   };
 
-  const onChangedPhoneNumber = val => {
-    const {msg} = validatePhoneNumber(val.trim());
+  const onChangedEmail = val => {
+    const { msg } = validateEmail(val.trim());
     setPhoneNumber(val.trim());
-    setPhoneNumberError(msg);
+    setEmailError(msg);
   };
 
   const onChangedPassword = val => {
-    const {msg} = validatePassword(val.trim());
+    const { msg } = validatePassword(val.trim());
     setPassword(val.trim());
     setPasswordError(msg);
   };
@@ -68,11 +72,23 @@ const SignUp = ({navigation}) => {
   const onLoginBtnPressed = () => {
     navigation.reset({
       index: 0,
-      routes: [{name: StackNav.Login}],
+      routes: [{ name: StackNav.Login }],
     });
   };
   const onNextButtonPressed = () => {
-    navigation.navigate(StackNav.OtpVerification);
+    const auth = getAuth();
+
+    createUserWithEmailAndPassword(auth, Email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("\n\nUser registered successfully:", user);
+        navigation.navigate(StackNav.TabBar);
+
+      })
+      .catch((error) => {
+        setIsModalVisible(true);
+        console.log('Error signing up:', error);
+      });
   };
 
   const PasswordIcon = () => {
@@ -110,13 +126,12 @@ const SignUp = ({navigation}) => {
           />
           <GInput
             label={strings.email_id}
-            value={phoneNumber}
+            value={Email}
             keyboardType={'default'}
             style={styles.mt30}
-            toGetTextFieldValue={onChangedPhoneNumber}
-            _errorText={phoneNumberError}
+            toGetTextFieldValue={onChangedEmail}
+            _errorText={EmailError}
             inputStyle={localStyles.inputStyle}
-            maxLength={10}
           />
           <GInput
             label={strings.password}
@@ -159,6 +174,9 @@ const SignUp = ({navigation}) => {
             />
           </View>
         </ScrollView>
+        {isModalVisible && (
+        <PopupModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} stringToShow={strings.pleaseEnter} />
+      )}
       </GKeyBoardAvoidingWrapper>
     </GSafeAreaView>
   );
@@ -177,7 +195,7 @@ const localStyles = StyleSheet.create({
     marginTop: getHeight(75),
   },
   container2: {
-    borderWidth:1,
+    borderWidth: 1,
     borderColor: colors.appyellow,
     ...styles.flex,
     backgroundColor: colors.appblack,
