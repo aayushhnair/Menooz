@@ -11,7 +11,8 @@ export function AuthNavigation() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={StackNav.Login}>
+      initialRouteName={StackNav.Splash}>
+      <Stack.Screen name={StackNav.Splash} component={StackRoute.Splash} />
       <Stack.Screen name={StackNav.Login} component={StackRoute.Login} />
       <Stack.Screen name={StackNav.SignUp} component={StackRoute.SignUp} />
       {/* <Stack.Screen
@@ -60,6 +61,15 @@ export default function StackNavigation() {
         name={StackNav.MyOrder}
         component={StackRoute.MyOrder}
       />
+      <Stack.Screen
+        name={StackNav.OrderDetails}
+        component={StackRoute.OrderDetails}
+      />
+      <Stack.Screen
+        name={StackNav.EditProfile}
+        component={StackRoute.EditProfile}
+      />
     </Stack.Navigator>
+
   );
 }

@@ -19,6 +19,7 @@ import {
   validatePassword,
 
 } from '../../utils/validators';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Eye_checked, Eye_icon, Next_Arrow } from '../../assets/svgs';
 import GButton from '../../components/common/GButton';
 import { StackNav } from '../../navigation/NavigationKeys';
@@ -75,22 +76,26 @@ const SignUp = ({ navigation }) => {
       index: 0,
       routes: [{ name: StackNav.Login }],
     });
-  };
-  const onNextButtonPressed = () => {
+  }
+  
+  const onNextButtonPressed = async () => {
     const auth = getAuth();
-
-    createUserWithEmailAndPassword(auth, Email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        postCustomerData(user, name);
-        navigation.navigate(StackNav.TabBar);
-
-      })
-      .catch((error) => {
-        setIsModalVisible(true);
-        console.log('Error signing up:', error);
-      });
+    
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, Email, password);
+      const user = userCredential.user;
+  
+      console.log('Name to be stored:', name);  // Log the name before storing
+    // Store the 'name' state directly
+      postCustomerData(user, name);
+      
+      navigation.navigate(StackNav.TabBar);
+    } catch (error) {
+      setIsModalVisible(true);
+      console.log('Error signing up:', error);
+    }
   };
+  
 
   const PasswordIcon = () => {
     return (

@@ -41,6 +41,7 @@ const ProductDetail = ({ route, navigation }) => {
   const product = route?.params.product;
   const status = route?.params.status;
   const restaurantID = route?.params.restaurantID;
+  const restaurantName = route?.params.restaurantName;
   const [imageLoading, setImageLoading] = useState(false);
   const [index, setIndex] = useState(0);
   const [ratingStar, setRatingStar] = useState([1, 2, 3, 4, 5]);
@@ -90,6 +91,7 @@ const ProductDetail = ({ route, navigation }) => {
   const navigateToCart = () => {
     navigation.navigate(StackNav.Cart, {
       restaurantID: restaurantID,
+      restaurantName: restaurantName,
     });
   };
 

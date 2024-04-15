@@ -24,6 +24,7 @@ const Cart = ({route, navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [coupon, setCoupon] = useState('');
   const restaurantID = route?.params.restaurantID;
+  const restaurantName = route?.params.restaurantName;
 
   
 
@@ -54,6 +55,7 @@ const Cart = ({route, navigation}) => {
   const navigateToCheckOut = () => {
     navigation.navigate(StackNav.CheckOut, {
       restaurantID: restaurantID,
+      restaurantName: restaurantName,
     });
   };
 

@@ -17,7 +17,7 @@ import { StackNav } from '../../navigation/NavigationKeys';
 import { useState } from 'react';
 import PopupModal from '../../components/customComponent.js/PopUp';
 
-const Product = ({ item, index, id, categoryName, getProduct }) => {
+const Product = ({ item, index, id, name, categoryName, getProduct }) => {
   const navigation = useNavigation();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -28,6 +28,7 @@ const Product = ({ item, index, id, categoryName, getProduct }) => {
       categoryName: categoryName,
       status: isRestaurantOpen(),
       restaurantID: id,
+      restaurantName: name,
     });}else{
       setIsModalVisible(true);
     }

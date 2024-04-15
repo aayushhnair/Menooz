@@ -34,6 +34,7 @@ const CheckOut = ({route}) => {
   const [paymentList, setPaymentList] = useState([]);
   const [isRememberCard, setIsRememberCard] = useState(false);
   const restaurantID = route?.params.restaurantID;
+  const restaurantName = route?.params.restaurantName;
 
   const [cardDetails, setCardDetails] = useState({
     cardName: '',
@@ -135,7 +136,7 @@ const CheckOut = ({route}) => {
   };
   const defaultCoustomr = "8682888400";
   const onPressPayNow = () => {
-    postOrderData(restaurantID, global.cart, user.uid, user.email)
+    postOrderData(restaurantID, global.cart, user.uid, user.email, restaurantName)
     navigation.navigate(StackNav.OrderPage);
   };
 

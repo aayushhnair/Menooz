@@ -10,26 +10,42 @@ import { StackNav } from '../../../navigation/NavigationKeys';
 import strings from '../../../i18n/strings';
 import { fetchOrderData } from '../../../Api/customerOnBoard';
 import { AuthContext } from '../../../Api/Authentication';
-import { Image } from 'react-native-svg';
+import { getTotalOfMultiplyByKey } from '../../../utils/helpers';
 
 
 const OrderList = () => {
   const navigation = useNavigation();
   const [orderData, setOrderData] = useState();
   const { user } = useContext(AuthContext)
-  const url = "https://i.redd.it/ea4u1b85f8wa1.jpg";
+  const [singleOrder, setSingleOrder] = useState();
 
 
   useEffect(() => {
     fetchOrderData(user.uid, (data) => {
       setOrderData(data);
+ 
     });
   }, []);
 
+  const Details = ({ label, data }) => {
+    return (
+      <View style={styles.mt15}>
+        <View style={styles.rowSpaceBetween}>
+          <GText type="m16" color={colors.appwhite}>
+            {label}
+          </GText>
+
+          <GText type="b16" color={colors.appwhite}>
+            {data}
+          </GText>
+        </View>
+      </View>
+    );
+  };
 
 
   const OrderComponent = ({ item, index }) => {
-    console.log("\n\nfetch Order Data: ", item);
+    const itemNames = item.OrderInfo ? item.OrderInfo.map(item => item.name).join('\n ') : '';
     return (
       <TouchableOpacity
         onPress={() => {
@@ -50,11 +66,27 @@ const OrderList = () => {
             </GText>
           </View>
         </View>
-          {item.OrderDelivered ? (<View></View>) : (<View style={styles.mt10}>
-            <View style={item.OrderStatus ? localStyles.orderStatustrue : localStyles.orderStatusfalse}>
-            <GText type="m14" color={colors.appwhite}>
-              {strings.status}{item.OrderStatus ? strings.prepared : strings.preparing}
-            </GText>
+
+
+        {item.OrderDelivered ? (<View></View>) : (<View style={styles.mt10}>
+          <View style={item.OrderStatus ? localStyles.orderStatustrue : localStyles.orderStatusfalse}>
+            <View style={localStyles.OrderContainer1} >
+              <GText type="b24" color={colors.appwhite}>
+                {item.restaurantName}
+              </GText>
+              <GText type="b15" style={styles.mr5} color={colors.appwhite}>
+                {strings.status}{item.OrderStatus ? strings.prepared : strings.preparing}
+              </GText>
+            </View>
+            <Details label={strings.totalItem} data={item.OrderInfo?.length} />
+            <Details
+              label={strings.price}
+              data={
+                strings.$ +
+                ' ' +
+                getTotalOfMultiplyByKey(item.OrderInfo, 'price', 'quantity')
+              }
+            />
           </View>
         </View>)}
 
@@ -90,14 +122,14 @@ const localStyles = StyleSheet.create({
   orderStatusfalse: {
     ...styles.flexrow,
     backgroundColor: colors.lightGreen5,
-    width: '40%',
+    width: '100%',
     ...styles.p10,
     borderRadius: moderateScale(10),
   },
   orderStatustrue: {
     ...styles.flexrow,
     backgroundColor: colors.green,
-    width: '40%',
+    width: '100%',
     ...styles.p10,
     borderRadius: moderateScale(10),
   },

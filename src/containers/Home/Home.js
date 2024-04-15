@@ -53,8 +53,9 @@ const Home = () => {
 
 
   const navigation = useNavigation();
+ 
   const productCard = ({ item, index }) => {
-    return <Product item={item} index = {index} id={item.restaurantid} />;
+    return <Product item={item} index = {index} id={item.restaurantid} name={item.restaurantName} />;
   };
 
   // function addToCart(data) {

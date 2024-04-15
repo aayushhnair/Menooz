@@ -1,7 +1,7 @@
 import { getDatabase, ref, push } from '@firebase/database';
 
 // Function to post order data under a specific restaurant ID and customer
-const postOrderData = (restaurantID, orderData, customerUID, customerEmail) => {
+const postOrderData = (restaurantID, orderData, customerUID, customerEmail, restaurantName) => {
   // Get a reference to the Firebase database
   console.log("\n\nRestaurant Id: ", orderData)
   const db = getDatabase();
@@ -11,6 +11,7 @@ const postOrderData = (restaurantID, orderData, customerUID, customerEmail) => {
   const customerRef = ref(db, `/customers/${customerUID}/OrderData`);
   const now = new Date().toISOString();
   const dataModal = {
+    "restaurantName" : restaurantName,
     'OrderID': customerUID,
     'OrderMail': customerEmail,
     'OrderStatus': true,

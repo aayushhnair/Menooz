@@ -33,6 +33,8 @@ import { StackNav } from '../../navigation/NavigationKeys';
 import { AuthContext } from '../../Api/Authentication';
 import PopupModal from '../../components/customComponent.js/PopUp';
 import { getAuth, signOut } from '@firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 
@@ -40,6 +42,7 @@ const Profile = () => {
   const navigation = useNavigation();
   const { user } = useContext(AuthContext)
   const [isModalVisible, setIsModalVisible] = useState(false);
+
 
   const logout = async () => {
     const auth = getAuth();
@@ -141,7 +144,6 @@ const Profile = () => {
   };
 
 
-
   return (
     <GSafeAreaView style={localStyles.root}>
       <GHeader
@@ -154,7 +156,7 @@ const Profile = () => {
         <Image source={images.noProfile} style={localStyles.profileImage} />
         <View style={localStyles.profileDetail}>
           <GText color={colors.appwhite} type="b18">
-            {user.email}
+            {user.name ? user.name : user.email}
           </GText>
           <GText color={colors.appyellow} type="r14">
             {strings.id}<GText color={colors.appwhite} type="r14">

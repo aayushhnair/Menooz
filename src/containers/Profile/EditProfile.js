@@ -1,5 +1,5 @@
 import {StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 
 // custom imports
 import GSafeAreaView from '../../components/common/GSafeAreaView';
@@ -10,6 +10,8 @@ import {colors, styles} from '../../themes';
 import GButton from '../../components/common/GButton';
 import {moderateScale} from '../../common/constants';
 import GHeader from '../../components/common/GHeader';
+import postCustomerData from '../../Api/customerOnBoard';
+import { AuthContext } from '../../Api/Authentication';
 
 export default function EditProfile({navigation}) {
   const [fullName, setFullName] = useState('');
@@ -25,8 +27,12 @@ export default function EditProfile({navigation}) {
   const onChangeGender = text => setGender(text);
   const onChangeBirthday = text => setBirthday(text);
   const onChangePassword = text => setPassword(text);
+ const {user} = useContext(AuthContext);
 
-  const onPressSave = () => navigation.goBack();
+  const onPressSave = () =>{ 
+    postCustomerData(user,fullName)
+    navigation.goBack();}
+
   return (
     <GSafeAreaView style={localStyles.root}>
       <GHeader headerTitle={strings.profile} />
@@ -42,7 +48,7 @@ export default function EditProfile({navigation}) {
             toGetTextFieldValue={onChangeFullName}
             inputStyle={localStyles.inputStyle}
           />
-          <GInput
+          {/* <GInput
             placeholder={strings.enterLastName}
             placeholderTextColor={colors.labelColor}
             label={strings.lastName}
@@ -92,13 +98,13 @@ export default function EditProfile({navigation}) {
             errorStyle={styles.mh0}
             toGetTextFieldValue={onChangePassword}
             inputStyle={localStyles.inputStyle}
-          />
+          /> */}
 
           <GButton
             onPress={onPressSave}
             containerStyle={localStyles.checkOutButton}
             title={strings.save}
-            bgColor={colors.green}
+            bgColor={colors.appyellow}
             textType={'b16'}
             color={colors.white}
           />
@@ -111,7 +117,7 @@ export default function EditProfile({navigation}) {
 const localStyles = StyleSheet.create({
   root: {
     ...styles.flex,
-    backgroundColor: colors.white,
+    backgroundColor: colors.appblack,
   },
   container: {
     ...styles.p20,
@@ -121,7 +127,7 @@ const localStyles = StyleSheet.create({
     borderRadius: moderateScale(20),
   },
   bgContainer: {
-    backgroundColor: colors.grayscale2,
+    backgroundColor: colors.appblack,
     flex: 1,
   },
   inputStyle: {

@@ -21,9 +21,7 @@ const postCustomerData = (user, name) => {
         },
         customerId: user.uid,
         email: user.email,
-        name: '',
-        orders: [
-        ],
+        name: name,
         phoneNumber: '',
     };
 
