@@ -67,6 +67,7 @@ import Filter from './Filter.svg';
 import Top_Left from './Top_Left.svg';
 import Cross from './Cross.svg';
 import MyOrder from './MyOrder.svg';
+import MyOrderTab from './MyOrder_Tabbar.svg';
 import Voucher from './Voucher.svg';
 import Notification from './Notification.svg';
 import MyProfile from './MyProfile.svg';
@@ -105,6 +106,7 @@ export {
   Next_Arrow,
   MailBox,
   PhoneCall,
+  MyOrderTab,
   Mark,
   Menu,
   Menu_Selected,

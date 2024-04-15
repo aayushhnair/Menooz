@@ -24,6 +24,7 @@ const Cart = ({route, navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [coupon, setCoupon] = useState('');
   const restaurantID = route?.params.restaurantID;
+
   
 
   useEffect(() => {

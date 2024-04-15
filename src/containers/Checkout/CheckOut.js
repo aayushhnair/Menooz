@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import GSafeAreaView from '../../components/common/GSafeAreaView';
 import GHeader from '../../components/common/GHeader';
@@ -26,6 +26,7 @@ import { getDeviceType } from '../../utils/helpers';
 import GKeyBoardAvoidingWrapper from '../../components/common/GKeyBoardAvoidingWrapper';
 import { StackNav } from '../../navigation/NavigationKeys';
 import postOrderData from '../../Api/orderPostAPI';
+import { AuthContext } from '../../Api/Authentication';
 
 const CheckOut = ({route}) => {
   const [paymentType, setPaymentType] = useState('UPI');
@@ -48,6 +49,7 @@ const CheckOut = ({route}) => {
   const [cardNumberError, setCardNumberError] = useState('');
   const [expiryDateError, setExpiryDateError] = useState('');
   const [cvvError, setCvvError] = useState('');
+  const {user} = useContext(AuthContext);
   const emailRegex =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -133,7 +135,7 @@ const CheckOut = ({route}) => {
   };
   const defaultCoustomr = "8682888400";
   const onPressPayNow = () => {
-    postOrderData(restaurantID, global.cart, defaultCoustomr)
+    postOrderData(restaurantID, global.cart, user.uid, user.email)
     navigation.navigate(StackNav.OrderPage);
   };
 

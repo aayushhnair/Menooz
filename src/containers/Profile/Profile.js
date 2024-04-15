@@ -4,18 +4,18 @@ import {
   StyleSheet,
   FlatList,
   View,
-  Text, 
+  Text,
   Button,
   TouchableOpacity,
 } from 'react-native';
-import React, {useContext, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, { useContext, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 import GSafeAreaView from '../../components/common/GSafeAreaView';
 import images from '../../assets/images';
-import {getWidth, moderateScale} from '../../common/constants';
+import { getWidth, moderateScale } from '../../common/constants';
 import GHeader from '../../components/common/GHeader';
-import {styles, colors} from '../../themes';
+import { styles, colors } from '../../themes';
 import GText from '../../components/common/GText';
 import {
   ArrowNext,
@@ -29,14 +29,30 @@ import {
   Voucher,
 } from '../../assets/svgs';
 import strings from '../../i18n/strings';
-import {StackNav} from '../../navigation/NavigationKeys';
+import { StackNav } from '../../navigation/NavigationKeys';
 import { AuthContext } from '../../Api/Authentication';
+import PopupModal from '../../components/customComponent.js/PopUp';
+import { getAuth, signOut } from '@firebase/auth';
 
 
 
 const Profile = () => {
   const navigation = useNavigation();
-  const {user} = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const logout = async () => {
+    const auth = getAuth();
+    try {
+      await signOut(auth);
+      // Navigate to login screen or a landing screen after logout
+      navigation.navigate(StackNav.Login);  // Replace with your login screen route
+    } catch (error) {
+      setIsModalVisible(true);
+      console.log('Error signing out:', error);
+    }
+  };
+
   const [profileMenuList, setProfileMenuList] = useState([
     {
       id: 1,
@@ -47,60 +63,73 @@ const Profile = () => {
     },
     {
       id: 2,
+      title: strings.myOrder,
+      icon: <MyOrder />,
+      component: '',
+      route: StackNav.MyOrder,
+    },
+    {
+      id: 3,
       title: strings.notification,
       icon: <Notification />,
       component: '',
       route: StackNav.Notification,
     },
     {
-      id: 3,
+      id: 4,
+      title: strings.voucher,
+      icon: <Voucher />,
+      component: '',
+      route: StackNav.Voucher,
+    },
+    {
+      id: 5,
       title: strings.setting,
       icon: <Setting />,
       component: '',
       route: StackNav.Setting,
     },
     {
-      id: 4,
-      title: strings.Payment,
-      icon: <Payment />,
-      component: '',
-      route: StackNav.Payment,
-    },
-    {
-      id: 5,
+      id: 6,
       title: strings.logout,
       icon: <Logout />,
-      component: '',
+      onPress: logout,
     },
   ]);
+
+
 
   const navigateToComponent = navigateTo => {
     if (navigateTo) navigation.navigate(navigateTo);
   };
 
-  const MyComponent = ({icon, title, navigateTo}) => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          navigateToComponent(navigateTo);
-        }}
-        style={localStyles.MyComponent}>
-        {icon}
-        <GText type="m14" color={colors.black}>
-          {title}
-        </GText>
-      </TouchableOpacity>
-    );
-  };
 
-  const MyProfileList = ({item, index}) => {
+
+  const MyProfileList = ({ item, index }) => {
+    if (item.onPress) {
+      return (
+        <TouchableOpacity
+          onPress={item.onPress}
+          style={localStyles.listComponent}>
+          <View style={localStyles.detailComponent}>
+            {item.icon}
+            <GText type="m16" color={colors.appwhite}>
+              {item.title}
+            </GText>
+          </View>
+          <View>
+            <ArrowNext />
+          </View>
+        </TouchableOpacity>
+      );
+    }
     return (
       <TouchableOpacity
         onPress={() => navigateToComponent(item.route)}
         style={localStyles.listComponent}>
         <View style={localStyles.detailComponent}>
           {item.icon}
-          <GText type="m16" color={colors.black}>
+          <GText type="m16" color={colors.appwhite}>
             {item.title}
           </GText>
         </View>
@@ -115,48 +144,36 @@ const Profile = () => {
 
   return (
     <GSafeAreaView style={localStyles.root}>
-        <GHeader
-          headerTitle="Profile"
-          isBackWhite={true}
-          titleColor={colors.white}
-          style={localStyles.header}
-        />
-        <View style={localStyles.profileContainer}>
-          <Image source={images.noProfile} style={localStyles.profileImage} />
-          <View style={localStyles.profileDetail}>
-            <GText color={colors.white} type="b18">
-              {user.email}
+      <GHeader
+        headerTitle="Profile"
+        isBackWhite={true}
+        titleColor={colors.white}
+        style={localStyles.header}
+      />
+      <View style={localStyles.profileContainer}>
+        <Image source={images.noProfile} style={localStyles.profileImage} />
+        <View style={localStyles.profileDetail}>
+          <GText color={colors.appwhite} type="b18">
+            {user.email}
+          </GText>
+          <GText color={colors.appyellow} type="r14">
+            {strings.id}<GText color={colors.appwhite} type="r14">
+              {user.uid.substring(20)}
             </GText>
-            <GText color={colors.white} type="r14">
-              {strings.id}{user.uid.substring(20)}
-            </GText>
-          </View>
+          </GText>
         </View>
-        <View style={localStyles.container}>
-          <MyComponent
-            icon={<MyOrder />}
-            title={strings.myOrder}
-            navigateTo={StackNav.MyOrder}
-          />
-          <MyComponent
-            icon={<Voucher />}
-            title={strings.voucher}
-            navigateTo={StackNav.OfferAndPromos}
-          />
-          <MyComponent
-            icon={<MyAddress />}
-            title={strings.myAddress}
-            navigateTo={StackNav.DeliveryAddress}
-          />
-        </View>
-        <FlatList
-          data={profileMenuList}
-          renderItem={MyProfileList}
-          keyExtractor={item => item.id}
-          scrollEnabled={false}
-          style={localStyles.listStyles}
-          contentContainerStyle={localStyles.list}
-        />
+      </View>
+      <FlatList
+        data={profileMenuList}
+        renderItem={MyProfileList}
+        keyExtractor={item => item.id}
+        scrollEnabled={false}
+        style={localStyles.listStyles}
+        contentContainerStyle={localStyles.list}
+      />
+      {isModalVisible && (
+        <PopupModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} stringToShow={strings.errorLogOut} />
+      )}
     </GSafeAreaView>
   );
 };
@@ -188,15 +205,7 @@ const localStyles = StyleSheet.create({
     ...styles.center,
     ...styles.g10,
   },
-  container: {
-    ...styles.rowSpaceBetween,
-    backgroundColor: colors.white,
-    ...styles.mh20,
-    ...styles.mt35,
-    ...styles.pv30,
-    ...styles.ph30,
-    borderRadius: moderateScale(15),
-  },
+
   MyComponent: {
     ...styles.g10,
     ...styles.center,
@@ -205,9 +214,10 @@ const localStyles = StyleSheet.create({
     ...styles.mt25,
   },
   list: {
-    backgroundColor: colors.white,
+
     borderRadius: moderateScale(15),
     ...styles.mh20,
+    ...styles.mt30,
   },
   listComponent: {
     ...styles.rowSpaceBetween,

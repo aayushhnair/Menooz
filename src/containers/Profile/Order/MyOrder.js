@@ -25,7 +25,7 @@ const MyOrder = () => {
   const [routes] = useState([
     {key: 'all', title: 'All', count: OrderListData.length},
     {key: 'running', title: 'Running', count: OrderListData.length},
-    {key: 'previous', title: 'Previous', count: OrderListData.length},
+    {key: 'previous', title: 'Delivered', count: OrderListData.length},
   ]);
 
   const renderTabBar = props => {
@@ -38,12 +38,12 @@ const MyOrder = () => {
           <View style={localStyles.tabTitleText}>
             <GText
               type="b16"
-              color={focused ? colors.green : colors.labelColor}>
+              color={focused ? colors.appyellow : colors.labelColor}>
               {route.title}
             </GText>
             <GText
               type="m12"
-              color={focused ? colors.green : colors.labelColor}>
+              color={focused ? colors.appwhite : colors.labelColor}>
               ({route.count})
             </GText>
           </View>
@@ -72,17 +72,17 @@ export default MyOrder;
 const localStyles = StyleSheet.create({
   root: {
     ...styles.flex,
-    backgroundColor: colors.grayscale2,
+    backgroundColor: colors.appblack,
   },
   tabBar: {
-    backgroundColor: colors.white,
+    backgroundColor: colors.black,
   },
   tabBarTitleText: {
     ...typography.fontSizes.f16,
     ...typography.fontWeights.Bold,
   },
   tabBarIndicator: {
-    backgroundColor: colors.green,
+    backgroundColor: colors.appyellow,
     height: 3,
     borderRadius: 3,
   },

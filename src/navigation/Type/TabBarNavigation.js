@@ -14,16 +14,14 @@ import {StackNav, TabNav} from '../NavigationKeys';
 import {getHeight, moderateScale} from '../../common/constants';
 import strings from '../../i18n/strings';
 import {
-  AddtoCart,
-  Heart,
+
+  Cart_2,
   Home,
   Home_Selected,
-  Menu,
-  Menu_Selected,
+
   Profile,
   Profile_Selected,
-  Save,
-  Save_Selected,
+
 } from '../../assets/svgs';
 import {colors, styles} from '../../themes';
 import GText from '../../components/common/GText';
@@ -42,8 +40,8 @@ export default function TabBarNavigation({navigation}) {
       case TabNav.Profile:
         icon = routeName == selectedTab ? <Profile_Selected /> : <Profile />;
         break;
-      case TabNav.Save:
-        icon = <Heart />;
+      case StackNav.MyOrder:
+        icon = <Cart_2 fill = {colors.appwhite}/>;
         break;
     }
     return (
@@ -93,11 +91,11 @@ export default function TabBarNavigation({navigation}) {
         type="DOWN"
         shadowStyle={localStyles.shadow}
         renderCircle={({selectedTab, navigate}) => (
-          <TouchableOpacity onPress={() => navigation.navigate(TabNav.Save)}>
+          <TouchableOpacity onPress={() => navigation.navigate(StackNav.MyOrder)}>
             <Animated.View style={localStyles.btnCircleUp}>
               <TabText
                 style={localStyles.cartButton}
-                routeName={TabNav.Save}
+                routeName={StackNav.MyOrder}
               />
             </Animated.View>
           </TouchableOpacity>

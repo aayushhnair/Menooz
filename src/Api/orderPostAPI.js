@@ -1,17 +1,20 @@
 import { getDatabase, ref, push } from '@firebase/database';
 
-// Function to post order data under a specific restaurant ID
-const postOrderData = (restaurantID, orderData, customerNumber) => {
+// Function to post order data under a specific restaurant ID and customer
+const postOrderData = (restaurantID, orderData, customerUID, customerEmail) => {
   // Get a reference to the Firebase database
+  console.log("\n\nRestaurant Id: ", orderData)
   const db = getDatabase();
 
   // Construct the reference to the location where the order data will be stored
   const restaurantRef = ref(db, `/Restaurants/${restaurantID}/OrderData`);
-
-  // Construct the data to be posted
+  const customerRef = ref(db, `/customers/${customerUID}/OrderData`);
+  const now = new Date().toISOString();
   const dataModal = {
-    'OrderID': customerNumber,
+    'OrderID': customerUID,
+    'OrderMail': customerEmail,
     'OrderStatus': true,
+    "OrderTime": now,
     'OrderDelivered': false,
     'OrderInfo': orderData,
   };
@@ -19,10 +22,18 @@ const postOrderData = (restaurantID, orderData, customerNumber) => {
   // Push the order data under the OrderData attribute for the specified restaurant ID
   push(restaurantRef, dataModal)
     .then((newRef) => {
-      console.log('Order data posted successfully with key:', newRef.key);
+      console.log('\n(FIREBASE) Order data posted successfully with key:', newRef.key);
     })
     .catch((error) => {
-      console.error('Error posting order data:', error);
+      console.log('(FIREBASE) Error posting order data:', error);
+    });
+
+  push(customerRef, dataModal)
+    .then((newRef) => {
+      console.log('\n(CUSTOMER) Order data posted successfully with key:', newRef.key);
+    })
+    .catch((error) => {
+      console.log('(CUSTOMER) Error posting order data:', error);
     });
 };
 

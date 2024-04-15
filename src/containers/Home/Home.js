@@ -37,7 +37,7 @@ const Home = () => {
   const userLatitude = 13.047078;
   const userLongitude = 80.120823;
   const [touch, setTouch] = useState(true);
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(''); 
   const [distance, setDistance] = useState(3);
   const restaurantKeys = Object.keys(restaurants);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -53,8 +53,8 @@ const Home = () => {
 
 
   const navigation = useNavigation();
-  const productCard = ({ item }) => {
-    return <Product item={item} id={item.id} />;
+  const productCard = ({ item, index }) => {
+    return <Product item={item} index = {index} id={item.restaurantid} />;
   };
 
   // function addToCart(data) {

@@ -24,6 +24,7 @@ import GButton from '../../components/common/GButton';
 import { StackNav } from '../../navigation/NavigationKeys';
 import GKeyBoardAvoidingWrapper from '../../components/common/GKeyBoardAvoidingWrapper';
 import { getAuth, createUserWithEmailAndPassword } from '@firebase/auth';
+import postCustomerData from '../../Api/customerOnBoard';
 
 const SignUp = ({ navigation }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
@@ -81,7 +82,7 @@ const SignUp = ({ navigation }) => {
     createUserWithEmailAndPassword(auth, Email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log("\n\nUser registered successfully:", user);
+        postCustomerData(user, name);
         navigation.navigate(StackNav.TabBar);
 
       })

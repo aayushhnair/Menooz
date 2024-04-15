@@ -1,7 +1,7 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {StackRoute} from '../NavigationRoutes';
-import {StackNav} from '../NavigationKeys';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StackRoute } from '../NavigationRoutes';
+import { StackNav } from '../NavigationKeys';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,21 +40,25 @@ export default function StackNavigation() {
         name={StackNav.NewPassword}
         component={StackRoute.NewPassword}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name={StackNav.ProductDetail}
         component={StackRoute.ProductDetail}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name={StackNav.Cart}
         component={StackRoute.Cart}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name={StackNav.CheckOut}
         component={StackRoute.CheckOut}
       />
-      <Stack.Screen 
+      <Stack.Screen
         name={StackNav.OrderPage}
         component={StackRoute.OrderPage}
+      />
+      <Stack.Screen
+        name={StackNav.MyOrder}
+        component={StackRoute.MyOrder}
       />
     </Stack.Navigator>
   );
