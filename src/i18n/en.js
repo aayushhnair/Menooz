@@ -150,7 +150,7 @@ export default {
   see_less: 'See Less',
   rating_star: 'Rating Star',
   profileName: 'Ayush Nair',
-  id: 'ID: 123456789',
+  id: 'ID: ',
   myOrder: 'My Order',
   myAddress: 'My Address',
   voucher: 'Voucher',

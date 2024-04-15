@@ -1,6 +1,8 @@
 
 import { getDatabase, ref, onValue } from '@firebase/database';
 import app from './firebaseconfig';
+
+
   const db = getDatabase(app);
   const fetchRestaurantData = (userLatitude, userLongitude, maxDistance, callback) => {
     const reference = ref(db, '/Restaurants');

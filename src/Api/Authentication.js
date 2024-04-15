@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  console.log("\n\nUser at AuthContext: ", user)
+  const accessToken = user?.stsTokenManager?.accessToken;
 
   useEffect(() => {
     const auth = getAuth();
@@ -15,12 +15,11 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     });
 
-    // Cleanup subscription on unmount
     return () => unsubscribe();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{accessToken, user, loading }}>
       {children}
     </AuthContext.Provider>
   );

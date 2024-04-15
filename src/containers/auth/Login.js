@@ -71,13 +71,11 @@ const Login = ({ navigation }) => {
     signInWithEmailAndPassword(auth, Email, password)
       .then((userCredential) => {
         const user = userCredential.user;
-        console.log("\n\nuser: ",user)
         navigation.navigate(StackNav.TabBar);
-     
+      
       })
       .catch((error) => {
         setIsModalVisible(true);
-        console.error('Error signing in:', error);
       });
 
     // navigation.reset({

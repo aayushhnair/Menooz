@@ -2,13 +2,13 @@ import {
   StyleSheet,
   View,
   Image,
-  ScrollView,
   ActivityIndicator,
   FlatList,
   TouchableOpacity,
   Linking,
   Alert,
 } from 'react-native';
+import { ScrollView } from 'react-native-virtualized-view'
 import React, { useState, useEffect } from 'react';
 import GText from '../../components/common/GText';
 import GSafeAreaView from '../../components/common/GSafeAreaView';

@@ -1,14 +1,16 @@
-import React from 'react';
+import React, {useContext, useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import StackNavigation from './Type/StackNavigation';
-import { AuthProvider } from '../Api/Authentication';
+import StackNavigation, { AuthNavigation } from './Type/StackNavigation';
+import { AuthContext, AuthProvider } from '../Api/Authentication';
 
 export default function AppNavigator() {
+
+  const {accessToken} = useContext(AuthContext)
+  console.log("\n\nUserData at Indnex: ",accessToken)
+  
   return (
-    <AuthProvider>
       <NavigationContainer>
-        <StackNavigation />
+      {accessToken ? <StackNavigation /> : <AuthNavigation />}
       </NavigationContainer>
-    </AuthProvider>
   );
-}
+} 

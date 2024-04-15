@@ -9,6 +9,7 @@ export default {
   nextSymbol3: require('./NextSymbol_3.png'),
   verified: require('./Verified.png'),
   home: require('./Home.png'),
+  noProfile: require('./noProfile.png'),
   bangladeshiCauliflower: require('./Bangladeshi_Cauliflower.png'),
   bangladeshiCabage: require('./Bangladeshi_Cabage.png'),
   carat: require('./Carat.png'),

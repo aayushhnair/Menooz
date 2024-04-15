@@ -4,11 +4,11 @@ import {
   StyleSheet,
   FlatList,
   View,
-  Text,
+  Text, 
   Button,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 
 import GSafeAreaView from '../../components/common/GSafeAreaView';
@@ -30,14 +30,13 @@ import {
 } from '../../assets/svgs';
 import strings from '../../i18n/strings';
 import {StackNav} from '../../navigation/NavigationKeys';
-import DocumentPicker from 'react-native-document-picker';
-import { RNFS } from 'react-native-fs';
-import XLSX from 'xlsx';
+import { AuthContext } from '../../Api/Authentication';
 
 
 
 const Profile = () => {
   const navigation = useNavigation();
+  const {user} = useContext(AuthContext)
   const [profileMenuList, setProfileMenuList] = useState([
     {
       id: 1,
@@ -116,14 +115,6 @@ const Profile = () => {
 
   return (
     <GSafeAreaView style={localStyles.root}>
-      {/* <ImageBackground
-        source={images.profileBackground}
-        resizeMode="cover"
-        style={{
-          width: '100%',
-          height: '100%',
-          alignSelf: 'center',
-        }}>
         <GHeader
           headerTitle="Profile"
           isBackWhite={true}
@@ -131,13 +122,13 @@ const Profile = () => {
           style={localStyles.header}
         />
         <View style={localStyles.profileContainer}>
-          <Image source={images.profile} style={localStyles.profileImage} />
+          <Image source={images.noProfile} style={localStyles.profileImage} />
           <View style={localStyles.profileDetail}>
             <GText color={colors.white} type="b18">
-              {strings.profileName}
+              {user.email}
             </GText>
             <GText color={colors.white} type="r14">
-              {strings.id}
+              {strings.id}{user.uid.substring(20)}
             </GText>
           </View>
         </View>
@@ -166,7 +157,6 @@ const Profile = () => {
           style={localStyles.listStyles}
           contentContainerStyle={localStyles.list}
         />
-      </ImageBackground> */}
     </GSafeAreaView>
   );
 };
@@ -184,7 +174,6 @@ const localStyles = StyleSheet.create({
   },
   profileContainer: {
     ...styles.mt35,
-    ...styles.flexRow,
     ...styles.itemsCenter,
     ...styles.g15,
     ...styles.mh30,
@@ -196,6 +185,7 @@ const localStyles = StyleSheet.create({
     backgroundColor: colors.profileBg,
   },
   profileDetail: {
+    ...styles.center,
     ...styles.g10,
   },
   container: {

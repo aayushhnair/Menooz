@@ -5,31 +5,30 @@ import {StackNav} from '../NavigationKeys';
 
 const Stack = createNativeStackNavigator();
 
-export default function StackNavigation() {
-  // Auth Stack
-  function AuthNavigation() {
-    return (
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-        initialRouteName={StackNav.Login}>
-        <Stack.Screen name={StackNav.Login} component={StackRoute.Login} />
-        <Stack.Screen name={StackNav.SignUp} component={StackRoute.SignUp} />
-        {/* <Stack.Screen
-          name={StackNav.OtpVerification}
-          component={StackRoute.OtpVerification}
-        /> */}
-      </Stack.Navigator>
-    );
-  }
-  // Main Stack
+export function AuthNavigation() {
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
       initialRouteName={StackNav.Login}>
+      <Stack.Screen name={StackNav.Login} component={StackRoute.Login} />
+      <Stack.Screen name={StackNav.SignUp} component={StackRoute.SignUp} />
+      {/* <Stack.Screen
+        name={StackNav.OtpVerification}
+        component={StackRoute.OtpVerification}
+      /> */}
+    </Stack.Navigator>
+  );
+}
+
+export default function StackNavigation() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName={StackNav.TabBar}>
 
       <Stack.Screen name={StackNav.Auth} component={AuthNavigation} />
       <Stack.Screen name={StackNav.TabBar} component={StackRoute.TabBar} />
