@@ -56,6 +56,7 @@ const Cart = ({route, navigation}) => {
     navigation.navigate(StackNav.CheckOut, {
       restaurantID: restaurantID,
       restaurantName: restaurantName,
+      totalPrice: getTotalOfMultiplyByKey(cartList, 'price', 'quantity'),
     });
   };
 

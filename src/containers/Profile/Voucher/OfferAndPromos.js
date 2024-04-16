@@ -97,12 +97,12 @@ const OfferAndPromos = () => {
   return (
     <GSafeAreaView style={localStyles.root}>
       <GHeader headerTitle={StackNav.OfferAndPromos} />
-      <FlatList
+      {/* <FlatList
         data={CouponList}
         contentContainerStyle={localStyles.CouponList}
         renderItem={CouponComponent}
         keyExtractor={(item, index) => index.toString()}
-      />
+      /> */}
     </GSafeAreaView>
   );
 };
@@ -112,7 +112,7 @@ export default OfferAndPromos;
 const localStyles = StyleSheet.create({
   root: {
     ...styles.flex,
-    backgroundColor: colors.white,
+    backgroundColor: colors.appblack,
   },
   CouponList: {
     paddingHorizontal: '5%',

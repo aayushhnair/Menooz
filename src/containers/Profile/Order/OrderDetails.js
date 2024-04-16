@@ -152,7 +152,6 @@ const OrderDetails = ({ props, route }) => {
     } else {
       setOrder_status('Processing');
     }
-    console.log(item)
     return (
       <View style={localStyles.productContainer}>
         <View style={localStyles.productContainer1}>

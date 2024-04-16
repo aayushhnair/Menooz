@@ -41,7 +41,7 @@ export default function Setting() {
     <GSafeAreaView style={localStyles.root}>
       <GHeader headerTitle={strings.setting} />
       <GKeyBoardAvoidingWrapper containerStyle={localStyles.bgContainer}>
-        <View style={localStyles.container}>
+        {/* <View style={localStyles.container}>
           <FlatList
             data={settingData}
             renderItem={MyProfileList}
@@ -50,7 +50,7 @@ export default function Setting() {
             style={localStyles.listStyles}
             contentContainerStyle={localStyles.list}
           />
-        </View>
+        </View> */}
       </GKeyBoardAvoidingWrapper>
     </GSafeAreaView>
   );
@@ -69,7 +69,7 @@ const localStyles = StyleSheet.create({
     borderRadius: moderateScale(20),
   },
   bgContainer: {
-    backgroundColor: colors.grayscale2,
+    backgroundColor: colors.appblack,
     flex: 1,
   },
   list: {

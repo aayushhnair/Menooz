@@ -31,9 +31,49 @@ const postCustomerData = (user, name) => {
             console.log('Customer data posted successfully for uid:', user.uid, customerRef);
         })
         .catch((error) => {
-            console.error('Error posting customer data:', error);
+            console.log('Error posting customer data:', error);
         });
 };
+
+const editCustomerData = (uid, fieldToUpdate, newValue) => {
+    try {
+        // Get a reference to the Firebase database
+        const db = getDatabase();
+
+        // Define the path based on the field to update
+        let path;
+        switch (fieldToUpdate) {
+            case 'name':
+                path = `customers/${uid}/name`;
+                break;
+            case 'phoneNumber':
+                path = `customers/${uid}/phoneNumber`;
+                break;
+            case 'gender':
+                path = `customers/${uid}/gender`;
+                break;
+            default:
+                console.error('Invalid field to update');
+                return;
+        }
+
+        // Construct the reference to the specific field
+        const fieldRef = ref(db, path);
+
+        // Update the specific field with the new value
+        set(fieldRef, newValue)
+            .then(() => {
+                console.log(`Updated ${fieldToUpdate} successfully for uid: ${uid}`);
+            })
+            .catch((error) => {
+                console.log(`Error updating ${fieldToUpdate}:`, error);
+            });
+
+    } catch (error) {
+        console.log('Error editing customer data:', error);
+    }
+};
+
 
 const fetchOrderData = (uid, callback) => {
     try {
@@ -57,4 +97,4 @@ const fetchOrderData = (uid, callback) => {
 };
 
 export default postCustomerData;
-export { fetchOrderData };
+export { fetchOrderData, editCustomerData };

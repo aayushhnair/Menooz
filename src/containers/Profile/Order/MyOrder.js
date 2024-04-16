@@ -41,11 +41,6 @@ const MyOrder = () => {
               color={focused ? colors.appyellow : colors.labelColor}>
               {route.title}
             </GText>
-            <GText
-              type="m12"
-              color={focused ? colors.appwhite : colors.labelColor}>
-              ({route.count})
-            </GText>
           </View>
         )}
         style={localStyles.tabBar}

@@ -69,6 +69,18 @@ export default function StackNavigation() {
         name={StackNav.EditProfile}
         component={StackRoute.EditProfile}
       />
+      <Stack.Screen
+        name={StackNav.Notification}
+        component={StackRoute.Notification}
+      />
+            <Stack.Screen
+        name={StackNav.OfferAndPromos}
+        component={StackRoute.OfferAndPromos}
+      />
+            <Stack.Screen
+        name={StackNav.Setting}
+        component={StackRoute.Setting}
+      />
     </Stack.Navigator>
 
   );

@@ -1,7 +1,7 @@
 import { getDatabase, ref, push } from '@firebase/database';
 
 // Function to post order data under a specific restaurant ID and customer
-const postOrderData = (restaurantID, orderData, customerUID, customerEmail, restaurantName) => {
+const postOrderData = (restaurantID, orderData, customerUID, customerEmail, restaurantName, paymentType) => {
   // Get a reference to the Firebase database
   console.log("\n\nRestaurant Id: ", orderData)
   const db = getDatabase();
@@ -18,6 +18,7 @@ const postOrderData = (restaurantID, orderData, customerUID, customerEmail, rest
     "OrderTime": now,
     'OrderDelivered': false,
     'OrderInfo': orderData,
+    'PaymentMethod': paymentType,
   };
 
   // Push the order data under the OrderData attribute for the specified restaurant ID

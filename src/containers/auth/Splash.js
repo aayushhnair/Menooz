@@ -25,10 +25,6 @@ const Splash = ({navigation}) => {
   const asyncProcess = async () => {
     try {
         if (!!accessToken) {
-          navigation.reset({
-            index: 0,
-            routes: [{name: StackNav.TabBar}],
-          });
         } else {
           navigation.navigate(StackNav.Login)
         }

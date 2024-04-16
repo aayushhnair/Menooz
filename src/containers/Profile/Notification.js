@@ -83,7 +83,7 @@ export default function Notification() {
     <GSafeAreaView style={localStyles.root}>
       <GHeader headerTitle={strings.notification} />
       <GKeyBoardAvoidingWrapper containerStyle={localStyles.bgContainer}>
-        <View style={localStyles.container}>
+        {/* <View style={localStyles.container}>
           <FlatList
             data={SecurityData}
             renderItem={MyProfileList}
@@ -91,7 +91,7 @@ export default function Notification() {
             scrollEnabled={false}
             contentContainerStyle={localStyles.list}
           />
-        </View>
+        </View> */}
       </GKeyBoardAvoidingWrapper>
     </GSafeAreaView>
   );
@@ -100,7 +100,7 @@ export default function Notification() {
 const localStyles = StyleSheet.create({
   root: {
     ...styles.flex,
-    backgroundColor: colors.white,
+    backgroundColor: colors.appblack,
   },
   container: {
     ...styles.ph20,
@@ -110,7 +110,7 @@ const localStyles = StyleSheet.create({
     borderRadius: moderateScale(20),
   },
   bgContainer: {
-    backgroundColor: colors.grayscale2,
+    backgroundColor: colors.appblack,
     flex: 1,
   },
   list: {

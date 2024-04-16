@@ -10,8 +10,6 @@ import GButton from '../../components/common/GButton';
 import { Address, paymentMethodList, restaurent } from '../../Api/constant';
 import { moderateScale } from '../../common/constants';
 import {
-  RadioFilled,
-  RadioUnfilled,
   Switch_off,
   Switch_on,
 } from '../../assets/svgs';
@@ -27,14 +25,46 @@ import GKeyBoardAvoidingWrapper from '../../components/common/GKeyBoardAvoidingW
 import { StackNav } from '../../navigation/NavigationKeys';
 import postOrderData from '../../Api/orderPostAPI';
 import { AuthContext } from '../../Api/Authentication';
+// import { GooglePay } from 'react-native-google-pay';
+import { Linking } from 'react-native';
 
-const CheckOut = ({route}) => {
+
+
+const CheckOut = ({ route }) => {
   const [paymentType, setPaymentType] = useState('UPI');
   const [addressList, setAddressList] = useState([]);
   const [paymentList, setPaymentList] = useState([]);
   const [isRememberCard, setIsRememberCard] = useState(false);
   const restaurantID = route?.params.restaurantID;
   const restaurantName = route?.params.restaurantName;
+  const totalPrice = route?.params.totalPrice;
+
+  
+  const upiId = 'avnxk3@okaxis'
+  const merchantName = 'AyushVNair'
+
+  const onPressPayNow = () => {
+    const upiPaymentUrl = `upi://pay?pa=${upiId}&pn=${merchantName}&am=${totalPrice}&cu=INR`;
+    Linking.openURL(upiPaymentUrl)
+      .then(() => {
+        console.log('UPI payment initiated');
+        postOrderData(restaurantID, global.cart, user.uid, user.email, restaurantName, paymentType)
+          .then(() => {
+            navigation.navigate(StackNav.OrderPage);
+          })
+          .catch((postOrderError) => {
+            console.log("Error posting order data:", postOrderError);
+          });
+      })
+      .catch((err) => {
+        console.error('Error opening UPI app:', err);
+      });
+  };
+  
+  
+  
+
+
 
   const [cardDetails, setCardDetails] = useState({
     cardName: '',
@@ -50,9 +80,9 @@ const CheckOut = ({route}) => {
   const [cardNumberError, setCardNumberError] = useState('');
   const [expiryDateError, setExpiryDateError] = useState('');
   const [cvvError, setCvvError] = useState('');
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
   const emailRegex =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 
   const navigation = useNavigation();
@@ -82,10 +112,9 @@ const CheckOut = ({route}) => {
   };
 
   const paymentCard = ({ item, index }) => {
-    
     return (
       <TouchableOpacity
-        onPress={() => {selectPayment(index) , setPaymentType(item.paymentTrancsactionType)}}
+        onPress={() => { selectPayment(index), setPaymentType(item.paymentTrancsactionType) }}
         style={[
           localStyles.paymentView,
           {
@@ -134,11 +163,7 @@ const CheckOut = ({route}) => {
     setUpiDetaiils({ ...upiDetails, upiAddress: val.trim() });
     setNameError(msg);
   };
-  const defaultCoustomr = "8682888400";
-  const onPressPayNow = () => {
-    postOrderData(restaurantID, global.cart, user.uid, user.email, restaurantName)
-    navigation.navigate(StackNav.OrderPage);
-  };
+
 
 
   const handleCardDisplay = () => {
@@ -161,7 +186,7 @@ const CheckOut = ({route}) => {
     <GSafeAreaView style={localStyles.root}>
       <GHeader headerTitle={strings.checkOut} />
       <GKeyBoardAvoidingWrapper>
-        <View style={localStyles.paymentSection}>
+        {/* <View style={localStyles.paymentSection}>
           <View style={localStyles.paymentTitle}>
             <GText color={colors.appwhite} type={'m16'}>{strings.selectPayment}</GText>
           </View>
@@ -173,7 +198,7 @@ const CheckOut = ({route}) => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
           />
-        </View>
+        </View> */}
         {paymentType === "CARD" ? (<View style={[localStyles.cardDetailsView, styles.g15]}>
           <GInput
             value={cardDetails.cardName}
@@ -232,7 +257,7 @@ const CheckOut = ({route}) => {
             />
           </View>
           <View style={localStyles.isRememberContainer}>
-            <GText color = {colors.appwhite} type="m16">{strings.rememberCard}</GText>
+            <GText color={colors.appwhite} type="m16">{strings.rememberCard}</GText>
             <TouchableOpacity onPress={changeIsRememberCardStatus}>
               {isRememberCard ? (
                 <Switch_on />
@@ -242,7 +267,7 @@ const CheckOut = ({route}) => {
             </TouchableOpacity>
           </View>
         </View>) : (<View style={[localStyles.cardDetailsView, styles.g15]}>
-          <GInput
+          {/* <GInput
             value={upiDetails.upiAddress}
             placeholder={strings.upiID}
             placeholderTextColor={colors.labelColor}
@@ -253,14 +278,18 @@ const CheckOut = ({route}) => {
             _errorText={nameError}
             innerInputStyle={innerInputStyle()}
             inputStyle={localStyles.inputStyle}
-          />
+          /> */}
+          <GText type = "b30" style={[localStyles.cardDetailsView, styles.g15]} color = {colors.appwhite}>
+            {strings.totalPrice}{" : "}{strings.$}{totalPrice}{"/-"}
+          </GText>
         </View>
         )}
 
         <GButton
           onPress={onPressPayNow}
           containerStyle={localStyles.checkOutButton}
-          title={strings.payNow}
+          // title={strings.payNow}
+          title={"PAY AHEAD WITH GPAY"}
           bgColor={colors.appyellow}
           textType={'b16'}
           color={colors.appblack}

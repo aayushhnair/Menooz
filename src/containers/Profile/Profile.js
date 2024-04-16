@@ -83,7 +83,7 @@ const Profile = () => {
       title: strings.voucher,
       icon: <Voucher />,
       component: '',
-      route: StackNav.Voucher,
+      route: StackNav.OfferAndPromos,
     },
     {
       id: 5,
