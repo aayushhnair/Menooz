@@ -7,9 +7,7 @@ import { requestLocationPermissions } from './Api/locationService';
 
 
 const App = () => {
-  useEffect(() => {
-    requestLocationPermissions()
-  }, []);
+
   return (
     <AuthProvider>
       <View style={styles.flex}>

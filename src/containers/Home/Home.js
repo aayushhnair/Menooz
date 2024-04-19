@@ -28,7 +28,8 @@ import { StackNav } from '../../navigation/NavigationKeys';
 import fetchRestaurantData from '../../Api/restaurantdata';
 import PopupModal from '../../components/customComponent.js/PopUp';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { requestNewLocationPermissions } from '../../Api/locationService';
+import { requestLocationPermissions, requestNewLocationPermissions } from '../../Api/locationService';
+
 
 const Home = () => {
 
@@ -51,7 +52,7 @@ const Home = () => {
         if (storedLocation) {
           setLocation(JSON.parse(storedLocation));
         } else {
-          const newLocation = await requestLocationPermission();
+          const newLocation = await requestLocationPermissions();
           setLocation(newLocation);
         }
       } catch (error) {
