@@ -22,14 +22,13 @@ import {
 } from '../../common/constants';
 import GText from '../../components/common/GText';
 import GButton from '../../components/common/GButton';
-import images from '../../assets/images';
 import strings from '../../i18n/strings';
-import { newItem, popularPack } from '../../Api/constant';
 import Product from './product';
 import { StackNav } from '../../navigation/NavigationKeys';
 import fetchRestaurantData from '../../Api/restaurantdata';
-import GInput from '../../components/common/GInput';
 import PopupModal from '../../components/customComponent.js/PopUp';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { requestNewLocationPermissions } from '../../Api/locationService';
 
 const Home = () => {
 
@@ -37,25 +36,44 @@ const Home = () => {
   const userLatitude = 13.047078;
   const userLongitude = 80.120823;
   const [touch, setTouch] = useState(true);
-  const [value, setValue] = useState(''); 
+  const [value, setValue] = useState('');
   const [distance, setDistance] = useState(3);
   const restaurantKeys = Object.keys(restaurants);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [location, setLocation] = useState(null);
 
 
   useEffect(() => {
-    fetchRestaurantData(userLatitude, userLongitude, distance, (data) => {
+    const getLocation = async () => {
+      try {
+        const storedLocation = await AsyncStorage.getItem('location');
+
+        if (storedLocation) {
+          setLocation(JSON.parse(storedLocation));
+        } else {
+          const newLocation = await requestLocationPermission();
+          setLocation(newLocation);
+        }
+      } catch (error) {
+        console.error('Error getting location from AsyncStorage:', error);
+      }
+    };
+
+    getLocation();
+
+    fetchRestaurantData(location?.latitude, location?.longitude, distance, (data) => {
       setRestaurants(data);
     });
+    global.cart = [];
 
-  }, [touch]);
+  }, []);
 
 
 
   const navigation = useNavigation();
- 
+
   const productCard = ({ item, index }) => {
-    return <Product item={item} index = {index} id={item.restaurantid} name={item.restaurantName} />;
+    return <Product item={item} index={index} id={item.restaurantid} name={item.restaurantName} />;
   };
 
 
@@ -71,7 +89,6 @@ const Home = () => {
 
 
   const Section = ({ sectionName, product }) => {
-    const restaurantsArray = Object.values(product);
     return (
       <View>
         <View style={localStyles.sectionHeader}>
@@ -87,7 +104,7 @@ const Home = () => {
           <FlatList
             keyExtractor={(item, index) => index.toString()}
             numColumns={1}
-            data={restaurantsArray}
+            data={product}
             renderItem={productCard}
           />
         </View>
@@ -101,20 +118,22 @@ const Home = () => {
           icon={<Menu_Left />}
           bgColor={colors.grayScale6}
           containerStyle={localStyles.button}></GButton> */}
-        <View style={localStyles.location}>
-          <Location fill={colors.appyellow} />
-          <View style={localStyles.locationText}>
-            <View style={styles.rowCenter}>
-              <GText type="b14" style={styles.mb5} color={colors.appyellow} >
-                {strings.currLocation}
-              </GText>
-              <GButton
-                icon={<DropDown />}
-                containerStyle={localStyles.locationButton}></GButton>
+        <TouchableOpacity onPress={() => requestNewLocationPermissions()}>
+          <View style={localStyles.location}>
+            <Location fill={colors.appyellow} />
+            <View style={localStyles.locationText}>
+              <View style={styles.rowCenter}>
+                <GText type="b14" style={styles.mb5} color={colors.appyellow} >
+                  {strings.currLocation}
+                </GText>
+                <GButton
+                  icon={<DropDown />}
+                  containerStyle={localStyles.locationButton}></GButton>
+              </View>
+              <GText type="r16" color={colors.appwhite} >{strings.location}</GText>
             </View>
-            <GText type="r16" color={colors.appwhite} >{strings.location}</GText>
           </View>
-        </View>
+        </TouchableOpacity>
         <GButton
           icon={<Search />}
           bgColor={colors.appblack}
@@ -125,12 +144,6 @@ const Home = () => {
         showsVerticalScrollIndicator={false}
         nestedScrollEnabled={true}
         style={localStyles.scrollContainer}>
-        {/* <Image
-          source={images.home}
-          resizeMode="contain"
-          style={localStyles.imageStyle}
-        /> */}
-        {/* <Section sectionName={strings.newItem} product={popularPack} /> */}
         <Section sectionName={strings.newItem} product={restaurants} />
       </ScrollView>
       {isModalVisible && (
@@ -184,7 +197,7 @@ const localStyles = StyleSheet.create({
     borderRadius: moderateScale(15),
     height: "10%",
   },
-  rangebutton:{
+  rangebutton: {
     width: '50%',
     height: "80%",
   },

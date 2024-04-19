@@ -51,22 +51,20 @@ const ProductDetail = ({ route, navigation }) => {
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [isCartWarningVisible, setIsCartWarningVisible] = useState(false);
 
-  
+
 
 
   useEffect(() => {
-    
-    if(global.cart)
-    {if(global.cart[0]?.restaurantID != restaurantID)
-   { setIsCartWarningVisible(true);}}
+    if (global.cart) {
+      if (global.cart[0]?.restaurantID != restaurantID) { setIsCartWarningVisible(true); }
+    }
   }, []);
 
 
 
   const handleProceed = () => {
-   
-      global.cart = [];
-      setIsCartWarningVisible(false);
+    global.cart = [];
+    setIsCartWarningVisible(false);
   };
 
   const handleGoBack = () => {
@@ -76,32 +74,32 @@ const ProductDetail = ({ route, navigation }) => {
   };
 
   const onPressReview = () => navigation.navigate(StackNav.Review);
-  
+
   function addToCart(data) {
-    console.log("\nHow Cart Works : ", data);
+  
 
     // Add storeID to the item
     data.item.restaurantID = restaurantID;
 
     if (global.cart) {
-        if (global.cart.some(item => item.name === data.item.name && item.storeID === data.storeID)) {
-            let itemIndex = global.cart.findIndex(
-                item => item.name === data.item.name && item.storeID === data.storeID
-            );
-            global.cart[itemIndex].quantity += 1;
-        } else {
-            data.item.quantity = 1;
-            global.cart.push(data.item);
-        }
+      if (global.cart.some(item => item.name === data.item.name && item.storeID === data.storeID)) {
+        let itemIndex = global.cart.findIndex(
+          item => item.name === data.item.name && item.storeID === data.storeID
+        );
+        global.cart[itemIndex].quantity += 1;
+      } else {
+        data.item.quantity = 1;
+        global.cart.push(data.item);
+      }
     }
-    
+
     // Calculate total quantity
     let totalQuantity = 0;
     if (global.cart) {
-        totalQuantity = global.cart.reduce((total, item) => total + item.quantity, 0);
+      totalQuantity = global.cart.reduce((total, item) => total + item.quantity, 0);
     }
     setCartCounter(totalQuantity);
-}
+  }
 
 
 
@@ -130,29 +128,11 @@ const ProductDetail = ({ route, navigation }) => {
   };
 
 
-  // const onBuyNowPress = () => {
-  //   if (global.cart) {
-  //     if (global.cart.some(item => item.productName == product?.productName)) {
-  //       let itemIndex = global.cart.findIndex(
-  //         item => item?.productName == product?.productName,
-  //       );
-  //       global.cart[itemIndex].quantity =
-  //         global.cart[itemIndex].quantity + quantity;
-  //     } else {
-  //       product.quantity = quantity;
-  //       global.cart.push(product);
-  //     }
-  //   }
-  //   navigateToCart();
-  // };
 
   return (
     <GSafeAreaView style={localStyles.root}>
       <GHeader
         headerTitle={strings.app_name
-          // product?.categoryID == 11
-          //   ? strings.bundleDetailHeader
-          //   : strings.productDetailHeader
         }
       />
       <ScrollView showsVerticalScrollIndicator={false}>

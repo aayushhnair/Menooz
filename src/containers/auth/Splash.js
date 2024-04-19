@@ -1,5 +1,5 @@
 // Library Imports
-import {Animated, StyleSheet, View} from 'react-native';
+import {Animated, StyleSheet, View, Image} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -18,13 +18,15 @@ import {CartGreen, Logo} from '../../assets/svgs';
 import GText from '../../components/common/GText';
 import strings from '../../i18n/strings';
 import { AuthContext } from '../../Api/Authentication';
+import images from '../../assets/images';
 
 const Splash = ({navigation}) => {
   const {accessToken} = useContext(AuthContext)
   const [scale, setScale] = useState(new Animated.Value(0))
   const asyncProcess = async () => {
     try {
-        if (!!accessToken) {
+        if (!accessToken) {
+          console.log("\n\nToken : ", accessToken)
         } else {
           navigation.navigate(StackNav.Login)
         }
@@ -49,8 +51,12 @@ const Splash = ({navigation}) => {
     <View style={localStyles.container}>
       <View style={[localStyles.subContainer]}>
         <View style={{flex: 0.5, alignItems: 'flex-end'}}>
-          <View style={localStyles.iconWrapper}>
-            <Logo />
+          <View >
+          <Image
+              source={images.Logo}
+              resizeMode="cover"
+              style={localStyles.imgStyle}
+            />
           </View>
         </View>
         <View style={localStyles.textContainer}>
@@ -83,11 +89,14 @@ const localStyles = StyleSheet.create({
   textGroup: {
     ...styles.flexRow,
   },
+  imgStyle: {
+    width: moderateScale(130),
+    height: moderateScale(130),
+  },
   textContainer: {
     ...styles.flex,
     ...styles.justifyBetween,
     ...styles.flexColumn,
-    ...styles.ml20,
     marginTop: -10,
   },
   iconWrapper: {

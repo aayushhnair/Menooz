@@ -5,11 +5,12 @@ const db = getDatabase(app);
 
 const fetchRestaurantData = (userLatitude, userLongitude, maxDistance, callback) => {
     try {
+        console.log("\n\nLocation: ", userLatitude, userLongitude);
         const reference = ref(db, '/Restaurants');
         
         onValue(reference, (snapshot) => {
             const data = snapshot.val();
-            const filteredRestaurants = {};
+            const filteredRestaurants = [];
 
             if (data) {
                 Object.keys(data).forEach((key) => {
@@ -20,21 +21,26 @@ const fetchRestaurantData = (userLatitude, userLongitude, maxDistance, callback)
                         const distance = calculateDistance(userLatitude, userLongitude, restaurant.location.latitude, restaurant.location.longitude);
                         
                         if (distance <= maxDistance) {
-                            filteredRestaurants[key] = { ...restaurant, distance }; // Add restaurant to filteredRestaurants object
+                            filteredRestaurants.push({ id: key, ...restaurant, distance }); // Add restaurant to filteredRestaurants array
                         }
                     }
                 });
+
+                // Sort restaurants by distance
+                const sortedRestaurants = filteredRestaurants.sort((a, b) => a.distance - b.distance);
+
+                callback(sortedRestaurants); // Return sorted filtered restaurants as an array
             }
 
-            callback(filteredRestaurants); // Return filtered restaurants as an object
         }, {
             onlyOnce: true // Fetch data only once
         });
     } catch (error) {
         console.error('Error fetching restaurant data:', error);
-        callback({}); // Return empty object in case of error
+        callback([]); // Return empty array in case of error
     }
 };
+
 
 const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371;

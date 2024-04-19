@@ -11,8 +11,8 @@ export function AuthNavigation() {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName={StackNav.Splash}>
-      <Stack.Screen name={StackNav.Splash} component={StackRoute.Splash} />
+      initialRouteName={StackNav.Login}>
+      {/* <Stack.Screen name={StackNav.Splash} component={StackRoute.Splash} /> */}
       <Stack.Screen name={StackNav.Login} component={StackRoute.Login} />
       <Stack.Screen name={StackNav.SignUp} component={StackRoute.SignUp} />
       {/* <Stack.Screen

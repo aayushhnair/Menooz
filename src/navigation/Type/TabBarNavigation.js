@@ -19,8 +19,13 @@ import {
   Home,
   Home_Selected,
 
+  OrderEmpty,
+
+  OrderSuccess,
+
   Profile,
   Profile_Selected,
+  Shipped,
 
 } from '../../assets/svgs';
 import {colors, styles} from '../../themes';
@@ -41,7 +46,7 @@ export default function TabBarNavigation({navigation}) {
         icon = routeName == selectedTab ? <Profile_Selected /> : <Profile />;
         break;
       case StackNav.MyOrder:
-        icon = <Cart_2 fill = {colors.appwhite}/>;
+        icon = <Shipped />;
         break;
     }
     return (
@@ -107,11 +112,6 @@ export default function TabBarNavigation({navigation}) {
           position="LEFT"
           name={TabNav.Home}
           component={TabRoute.Home}
-        />
-        <Tab.Screen
-          position="CIRCLE"
-          name={TabNav.Save}
-          component={TabRoute.Save}
         />
         <Tab.Screen
           position="RIGHT"

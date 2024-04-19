@@ -1,5 +1,6 @@
 package com.menooz.app;
 
+import android.Manifest;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
