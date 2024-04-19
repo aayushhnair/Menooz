@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "768267928350",
+    "firebase_url": "https://menooz-bbd65-default-rtdb.firebaseio.com",
+    "project_id": "menooz-bbd65",
+    "storage_bucket": "menooz-bbd65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768267928350:android:bd4bf2352be310934cff0f",
+        "android_client_info": {
+          "package_name": "com.menooz.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr6Q2hgFET1Yfs-QVp2qGhsdBnJnFP_Uc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
