@@ -27,7 +27,7 @@ const postOrderData = (restaurantID, orderData, customerUID, customerEmail, rest
       console.log('\n(FIREBASE) Order data posted successfully with key:', newRef.key);
     })
     .catch((error) => {
-      console.log('(FIREBASE) Error posting order data:', error);
+      console.error('(FIREBASE) Error posting order data:', error);
     });
 
   push(customerRef, dataModal)
@@ -35,7 +35,7 @@ const postOrderData = (restaurantID, orderData, customerUID, customerEmail, rest
       console.log('\n(CUSTOMER) Order data posted successfully with key:', newRef.key);
     })
     .catch((error) => {
-      console.log('(CUSTOMER) Error posting order data:', error);
+      console.error('(CUSTOMER) Error posting order data:', error);
     });
 };
 

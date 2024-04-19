@@ -34,7 +34,7 @@ import {
 import { StackNav } from '../../navigation/NavigationKeys';
 import { getProduct } from 'react-native-device-info';
 import MenuCard from './MenuItem';
-import PopupModal from '../../components/customComponent.js/PopUp';
+import PopupModal, { CartPopupModal } from '../../components/customComponent.js/PopUp';
 
 const ProductDetail = ({ route, navigation }) => {
   const categoryName = route?.params.categoryName;
@@ -49,32 +49,60 @@ const ProductDetail = ({ route, navigation }) => {
   const [quantity, setQuantity] = useState(1);
   const [cartCounter, setCartCounter] = useState(0);
   const [isModalVisible, setIsModalVisible] = useState(true);
+  const [isCartWarningVisible, setIsCartWarningVisible] = useState(false);
+
+  
 
 
   useEffect(() => {
-    global.cart = [];
+    
+    if(global.cart)
+    {if(global.cart[0]?.restaurantID != restaurantID)
+   { setIsCartWarningVisible(true);}}
   }, []);
 
+
+
+  const handleProceed = () => {
+   
+      global.cart = [];
+      setIsCartWarningVisible(false);
+  };
+
+  const handleGoBack = () => {
+    setIsCartWarningVisible(false);
+    navigation.navigate(StackNav.TabBar)
+
+  };
+
   const onPressReview = () => navigation.navigate(StackNav.Review);
+  
   function addToCart(data) {
+    console.log("\nHow Cart Works : ", data);
+
+    // Add storeID to the item
+    data.item.restaurantID = restaurantID;
+
     if (global.cart) {
-      if (global.cart.some(item => item.name === data.item.name)) {
-        let itemIndex = global.cart.findIndex(
-          item => item.name === data.item.name
-        );
-        global.cart[itemIndex].quantity += 1;
-      } else {
-        data.item.quantity = 1;
-        global.cart.push(data.item);
-      }
+        if (global.cart.some(item => item.name === data.item.name && item.storeID === data.storeID)) {
+            let itemIndex = global.cart.findIndex(
+                item => item.name === data.item.name && item.storeID === data.storeID
+            );
+            global.cart[itemIndex].quantity += 1;
+        } else {
+            data.item.quantity = 1;
+            global.cart.push(data.item);
+        }
     }
+    
     // Calculate total quantity
     let totalQuantity = 0;
     if (global.cart) {
-      totalQuantity = global.cart.reduce((total, item) => total + item.quantity, 0);
+        totalQuantity = global.cart.reduce((total, item) => total + item.quantity, 0);
     }
     setCartCounter(totalQuantity);
-  }
+}
+
 
 
 
@@ -217,9 +245,14 @@ const ProductDetail = ({ route, navigation }) => {
           />
         </View>
       </ScrollView>
+      <CartPopupModal
+        isVisible={isCartWarningVisible}
+        onClose={handleProceed}
+        onBack={handleGoBack}
+      />
       {/* {isModalVisible && (
-        <PopupModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} stringToShow={strings.shopClosed} />
-      )} */}
+        <PopupModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)} stringToShow={strings.cartCleared} />
+      )}  */}
     </GSafeAreaView>
   );
 };

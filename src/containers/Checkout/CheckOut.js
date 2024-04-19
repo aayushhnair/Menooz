@@ -40,8 +40,8 @@ const CheckOut = ({ route }) => {
   const totalPrice = route?.params.totalPrice;
 
   
-  const upiId = 'avnxk3@okaxis'
-  const merchantName = 'AyushVNair'
+  const upiId = 'osjohn01@oksbi'
+  const merchantName = 'ObedSamuelJohn'
 
   const onPressPayNow = () => {
     const upiPaymentUrl = `upi://pay?pa=${upiId}&pn=${merchantName}&am=${totalPrice}&cu=INR`;

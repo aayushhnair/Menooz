@@ -58,19 +58,6 @@ const Home = () => {
     return <Product item={item} index = {index} id={item.restaurantid} name={item.restaurantName} />;
   };
 
-  // function addToCart(data) {
-  //   if (global.cart) {
-  //     if (global.cart.some(item => item.productName == data.item.productName)) {
-  //       let itemIndex = global.cart.findIndex(
-  //         item => item.productName == data.item.productName,
-  //       );
-  //       global.cart[itemIndex].quantity = global.cart[itemIndex].quantity + 1;
-  //     } else {
-  //       data.item.quantity = 1;
-  //       global.cart.push(data.item);
-  //     }
-  //   }
-  // }
 
   const navigateToProductList = (categoryName, productList) => {
     navigation.navigate(StackNav.ProductList, {
